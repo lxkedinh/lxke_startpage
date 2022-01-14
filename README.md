@@ -1,5 +1,7 @@
 # My personalized Firefox start page
 
+![Image preview](preview.png)
+
 Built with:
 
 - [Next.js](https://nextjs.org/)
