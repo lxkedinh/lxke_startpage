@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'haxrcorp';
+  src: url('haxrcorpttf.ttf');
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-size: 15px;
+  background-image: url('../public/bg_tile.jpg');
+  background-repeat: repeat;
+  position: absolute;
+  display: block;
+  height: 100vh;
+  width: 100vw;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
