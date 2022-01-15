@@ -11,6 +11,5 @@ Credits to [tayumpee](https://github.com/tayumpee/start_page2_firefox_and_chrome
 
 ## TODOS
 
-1. Migrate this project to [TypeScript](https://www.typescriptlang.org/).
-2. Add second block under bookmarks to display my tasks from [Todoist](https://todoist.com/).
-3. Add component to display gif whenever a server error occurs.
+1. Add second block under bookmarks to display my tasks from [Todoist](https://todoist.com/).
+2. Add component to display gif whenever a server error occurs.
