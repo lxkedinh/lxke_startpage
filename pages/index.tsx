@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Flex, BookmarksContainer } from "../components/styles/Flex.styled";
+import { Flex } from "../components/styles/Flex.styled";
 import { BookmarksList } from "../components/styles/BookmarksList.styled";
 import Bookmark from "../components/Bookmark";
 import Clock from "../components/Clock";

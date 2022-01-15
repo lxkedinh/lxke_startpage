@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-export const StyledBookmark = styled.a.attrs((props) => ({
+interface StyledBookmarkProps {
+  href: string,
+}
+
+export const StyledBookmark = styled.a.attrs((props: StyledBookmarkProps) => ({
   href: props.href,
 }))`
   font-size: 16px;

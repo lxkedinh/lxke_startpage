@@ -6,8 +6,8 @@ const Clock = () => {
    * Get current time through js Date object
    * @returns string that represents the time in "DAY MM/DD/YYYY HOURS:MINUTES:SECONDS"
    */
-  const getTime = () => {
-    const days = [
+  const getTime = (): string => {
+    const days: string[] = [
       "SUNDAY",
       "MONDAY",
       "TUESDAY",
@@ -17,7 +17,7 @@ const Clock = () => {
       "SATURDAY",
     ];
 
-    let d = new Date();
+    let d: Date = new Date();
 
     return (
       days[d.getDay()] +
@@ -36,7 +36,7 @@ const Clock = () => {
     );
   };
 
-  const [time, setTime] = useState(getTime());
+  const [time, setTime] = useState<string>(getTime());
 
   useEffect(() => {
     setInterval(() => {

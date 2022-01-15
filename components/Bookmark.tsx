@@ -1,6 +1,12 @@
 import { StyledBookmark } from "./styles/Bookmark.styled";
+import * as types from 'styled-components/cssprop'
 
-const Bookmark = ({ href, text }) => {
+interface BookmarkProps {
+  href: string,
+  text: string,
+}
+
+const Bookmark = ({ href, text }: BookmarkProps) => {
   return (
     <li
       css={`
