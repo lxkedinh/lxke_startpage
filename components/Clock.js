@@ -22,17 +22,17 @@ const Clock = () => {
     return (
       days[d.getDay()] +
       " " +
-      ("0" + (d.getMonth() + 1)).slice(-2) +
+      String(d.getMonth() + 1).padStart(2, "0") +
       "/" +
-      ("0" + d.getDate()).slice(-2) +
+      String(d.getDate()).padStart(2, "0") +
       "/" +
       d.getFullYear() +
       " " +
-      ("0" + d.getHours()).slice(-2) +
+      String(d.getHours()).padStart(2, "0") +
       ":" +
-      ("0" + d.getMinutes()).slice(-2) +
+      String(d.getMinutes()).padStart(2, "0") +
       ":" +
-      ("0" + d.getSeconds()).slice(-2)
+      String(d.getSeconds()).padStart(2, "0")
     );
   };
 
