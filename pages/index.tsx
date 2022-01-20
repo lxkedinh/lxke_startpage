@@ -4,7 +4,7 @@ import { BookmarksList } from "../components/styles/BookmarksList.styled";
 import Bookmark from "../components/Bookmark";
 import Clock from "../components/Clock";
 import Banner from "../components/Banner";
-import { Container, TodoistContainer } from "../components/styles/Container.styled";
+import { Container } from "../components/styles/Container.styled";
 import { StyledTitle } from "../components/styles/Title.styled";
 
 export default function Home() {
@@ -71,9 +71,6 @@ export default function Home() {
             </Container>
             <Banner src="/m1.gif" />
           </Flex>
-          <TodoistContainer>
-
-          </TodoistContainer>
         </Flex>
       </Flex>
     </>
