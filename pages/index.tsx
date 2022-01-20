@@ -4,7 +4,7 @@ import { BookmarksList } from "../components/styles/BookmarksList.styled";
 import Bookmark from "../components/Bookmark";
 import Clock from "../components/Clock";
 import Banner from "../components/Banner";
-import { Container } from "../components/styles/Container.styled";
+import { Container, TodoistContainer } from "../components/styles/Container.styled";
 import { StyledTitle } from "../components/styles/Title.styled";
 
 export default function Home() {
@@ -25,7 +25,7 @@ export default function Home() {
               <Flex className="bookmarks-container" layout="row">
                 <BookmarksList>
                   {/* Social/Entertainment */}
-                  <Bookmark href="https://messenger.com" text="messenger" />
+                  <Bookmark href="https://facebook.com/messages" text="messenger" />
                   <Bookmark href="https://gmail.com" text="gmail" />
                   <Bookmark href="https://reddit.com" text="reddit" />
                   <Bookmark href="https://youtube.com" text="youtube" />
@@ -71,6 +71,9 @@ export default function Home() {
             </Container>
             <Banner src="/m1.gif" />
           </Flex>
+          <TodoistContainer>
+
+          </TodoistContainer>
         </Flex>
       </Flex>
     </>
