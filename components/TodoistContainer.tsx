@@ -4,6 +4,7 @@ import { DayTaskList } from "./styles/DayTaskList.styled";
 import { days } from "../util/dateTime";
 import DayTask from "./DayTask";
 import { TaskList, TaskListProps } from "../additional";
+import { Task } from "@doist/todoist-api-typescript";
 
 const TodoistContainer = ({ taskList }: TaskListProps) => {
   /**
@@ -56,6 +57,20 @@ const filterTasks = (taskList: TaskList, weekday: number) => {
   let filteredTasks: TaskList = taskList.filter(
     (task) => new Date(task.due.datetime).getDay() === weekday
   );
+
+  // sort the new filtered tasks by ascending due date (soonest to latest)
+  filteredTasks.sort((firstTask: Task, secondTask: Task): number => {
+    let firstTime = new Date(firstTask.due?.datetime as string);
+    let secondTime = new Date(secondTask.due?.datetime as string);
+
+    if (firstTime.getHours() < secondTime.getHours()) return -1;
+    else if (firstTime.getHours() > secondTime.getHours()) return 1;
+    else {
+      if (firstTime.getMinutes() < secondTime.getMinutes()) return -1;
+      else if (firstTime.getMinutes() > secondTime.getMinutes()) return 1;
+      else return 0;
+    }
+  });
 
   return filteredTasks.map((task, i) => {
     // time string to display on startpage and convert from 24-hour to 12-hour
