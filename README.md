@@ -11,5 +11,5 @@ Credits to [tayumpee](https://github.com/tayumpee/start_page2_firefox_and_chrome
 
 ## TODOS
 
-1. Add second block under bookmarks to display my tasks from [Todoist](https://todoist.com/).
+1. Sort Todoist tasks displayed by soonest due date to latest due date.
 2. Add component to display gif whenever a server error occurs.
