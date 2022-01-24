@@ -5,10 +5,9 @@ export const StyledTitle = styled.h1`
   overflow: hidden;
   line-height: 18px;
   font-family: haxrcorp, monospace;
-  font-size: 22px;
+  font-size: 32px;
   width: 300px;
-  margin-top: 70px;
-  margin-left: auto;
-  margin-right: auto;
+  line-height: 1;
+  margin: 0px auto 80px auto;
   color: #e6e6e6;
 `;
