@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface FlexProps {
-  layout: string,
+  layout: string;
 }
 
 export const Flex = styled.div<FlexProps>`
@@ -10,15 +10,25 @@ export const Flex = styled.div<FlexProps>`
   flex-flow: ${({ layout }) => layout || "row"};
 
   .main {
-    height: 319px;
+    height: 500px;
+    width: 100%;
   }
 
   .wrapper {
-    margin-top: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
 
   .bookmarks-container {
-    margin-top: 60px;
     justify-content: center;
   }
+`;
+
+export const Page = styled(Flex)`
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 `;

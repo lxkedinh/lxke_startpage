@@ -5,6 +5,5 @@ export const BookmarksList = styled.ul`
   list-style-type: none;
   padding-left: 0px;
   padding-right: 0px;
-  margin-left: 18px;
-  margin-right: 18px;
+  margin: auto 18px;
 `;

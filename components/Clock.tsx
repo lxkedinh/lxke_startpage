@@ -1,5 +1,6 @@
 import { StyledClock } from "./styles/Clock.styled";
 import { useState, useEffect } from "react";
+import { days } from "../util/dateTime";
 
 const Clock = () => {
   /**
@@ -7,16 +8,6 @@ const Clock = () => {
    * @returns string that represents the time in "DAY MM/DD/YYYY HOURS:MINUTES:SECONDS"
    */
   const getTime = (): string => {
-    const days: string[] = [
-      "SUNDAY",
-      "MONDAY",
-      "TUESDAY",
-      "WEDNESDAY",
-      "THURSDAY",
-      "FRIDAY",
-      "SATURDAY",
-    ];
-
     let d: Date = new Date();
 
     return (
