@@ -17,6 +17,8 @@ export default function Home({ taskList }: TaskListProps) {
     <>
       <Head>
         <title>ジャスミン</title>
+        <meta name='viewport' content='width=device-width' />
+        <meta charSet='utf-8' />
         <meta name='description' content="Luke's personal start page" />
         <link rel='icon' href='/favicon.ico' />
       </Head>

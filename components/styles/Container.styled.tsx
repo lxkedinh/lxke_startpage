@@ -9,7 +9,7 @@ export const Container = styled.div`
   text-align: center;
   background-color: #222436;
   flex-grow: 1;
-  height: 500px;
+  height: 400px;
 `;
 
 export const StyledTodoistContainer = styled(Container)`
