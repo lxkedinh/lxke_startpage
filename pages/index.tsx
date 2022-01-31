@@ -1,20 +1,29 @@
+// Next.js imports
+import { ThemeProvider } from "styled-components";
+import { theme } from "../styles/themes";
 import Head from "next/head";
-import { Flex, Page } from "../components/styles/Flex.styled";
-import { BookmarksList } from "../components/styles/BookmarksList.styled";
-import Bookmark from "../components/Bookmark";
-import Clock from "../components/Clock";
-import Banner from "../components/Banner";
-import TodoistContainer from "../components/TodoistContainer";
-import { DayTaskList } from "../components/styles/DayTaskList.styled";
+import { GetServerSideProps } from "next";
+
+// bookmark container and banner imports
 import { Container } from "../components/styles/Container.styled";
 import { StyledTitle } from "../components/styles/Title.styled";
-import { GetServerSideProps } from "next";
-import { Task, TodoistApi } from "@doist/todoist-api-typescript";
-import { TaskListProps, TaskList } from "../additional";
+import { BookmarksList } from "../components/styles/BookmarksList.styled";
+import Bookmark from "../components/Bookmark";
+import Banner from "../components/Banner";
 
-export default function Home({ taskList }: TaskListProps) {
+// Todoist related imports
+import TodoistContainer from "../components/TodoistContainer";
+import { TodoistError } from "../util/TodoistError";
+import TodoistErrorContainer from "../components/TodoistErrorContainer";
+import { TodoistApi, TodoistRequestError } from "@doist/todoist-api-typescript";
+
+// misc imports
+import { Flex, Page } from "../components/styles/Flex.styled";
+import Clock from "../components/Clock";
+
+export default function Home({ taskList, labels }: TodoistProps) {
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Head>
         <title>ジャスミン</title>
         <meta name='viewport' content='width=device-width' />
@@ -81,20 +90,59 @@ export default function Home({ taskList }: TaskListProps) {
             </Container>
             <Banner />
           </Flex>
-          <TodoistContainer taskList={taskList} />
+          {/* if a message property is present in taskList, it means an error occurred */}
+          {/* also check for if todo list is empty */}
+          {Object.keys(taskList).includes("message") ||
+          taskList.length === 0 ? (
+            <TodoistErrorContainer emptyList={taskList.length === 0} />
+          ) : (
+            <TodoistContainer taskList={taskList} labels={labels} />
+          )}
         </Flex>
       </Page>
-    </>
+    </ThemeProvider>
   );
 }
 
-// Fetch Todoist tasks for the next 7 days to display on start page
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const api = new TodoistApi(process.env.TODOIST_API_TOKEN as string);
 
-  const taskList = await api.getTasks({ filter: "7 days" });
+  // fetch Todoist tasks for the next 7 days to display on start page
+  // if promise fails, TodoistError is returned instead with following properties
+  let taskListQuery: TaskList | TodoistError | string | Error = await api
+    .getTasks({ filter: "7 days" })
+    .catch((error) => getTodoistError(error));
+
+  // also fetch Todoist labels for color coding rendered tasks on start page
+  // same as above, returns array of Labels or TodoistError
+  let labelsQuery: Labels | TodoistError | string | Error = await api
+    .getLabels()
+    .catch((error) => getTodoistError(error));
+
+  // data conversion to allow JSON serialization to be passed as props
+  const taskList: TaskList | TodoistError = JSON.parse(
+    JSON.stringify(taskListQuery)
+  );
+  const labels: Labels | TodoistError = JSON.parse(JSON.stringify(labelsQuery));
 
   return {
-    props: { taskList },
+    props: { taskList, labels },
   };
+};
+
+/**
+ * Helper function that returns a custom TodoistError defined in util/TodoistError.ts to be passed as props
+ * @param TodoistRequestError or a regular javascript Error object if Todoist servers encounters a problem it can't handle.
+ * @return custom TodoistError object to be passed as props
+ */
+const getTodoistError = (error: TodoistRequestError | Error): TodoistError => {
+  if (error instanceof TodoistRequestError) {
+    return new TodoistError(
+      error.message,
+      error.httpStatusCode,
+      error.responseData
+    );
+  }
+
+  return new TodoistError(error.message);
 };

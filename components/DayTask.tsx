@@ -1,21 +1,16 @@
 import * as types from "styled-components/cssprop";
+import { getColor } from "@doist/todoist-api-typescript";
 
 interface Props {
   id: number;
   time?: string;
   description?: string;
-  category?: number;
+  label?: string;
+  colorID: number;
   url: string;
 }
 
-const DayTask = ({ id, time, description, category, url }: Props) => {
-  // Determine text color for category depending on passed Todoist project id
-  switch (category) {
-    case 2159564228:
-      let categoryColor = "#96c3eb";
-      break;
-  }
-
+const DayTask = ({ id, time, description, label, colorID, url }: Props) => {
   return (
     <li
       css={`
@@ -23,6 +18,10 @@ const DayTask = ({ id, time, description, category, url }: Props) => {
         font-family: "haxrcorp";
         color: white;
         font-size: 24px;
+
+        &:hover {
+          text-decoration: underline;
+        }
       `}
     >
       <a href={url}>
@@ -30,10 +29,11 @@ const DayTask = ({ id, time, description, category, url }: Props) => {
         <br />
         <span
           css={`
-            color: #96c3eb;
+            /* get color from imported Todoist colors */
+            color: ${getColor(colorID).value};
           `}
         >
-          School
+          {label}
         </span>
       </a>
     </li>

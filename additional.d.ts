@@ -1,6 +1,8 @@
 // TypeScript type declarations
-export type TaskList = Task[];
+declare type TaskList = Task[];
+declare type Labels = Label[];
 
-export interface TaskListProps {
-  taskList: TaskList;
+declare interface TodoistProps {
+  taskList: TaskList | TodoistError;
+  labels: Labels | TodoistError;
 }

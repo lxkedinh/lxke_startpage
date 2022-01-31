@@ -9,12 +9,7 @@ interface BannerProps {
 const Banner = () => {
   return (
     <StyledBanner>
-      <Image
-        src={banner}
-        alt='banner image'
-        layout='responsive'
-        className='banner'
-      />
+      <Image src={banner} alt='banner image' layout='fill' className='banner' />
     </StyledBanner>
   );
 };

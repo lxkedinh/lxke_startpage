@@ -23,3 +23,10 @@ export const StyledTodoistContainer = styled(Container)`
   font-family: "haxrcorp";
   font-size: 24px;
 `;
+
+export const StyledTodoistErrorContainer = styled(StyledTodoistContainer)`
+  width: 1000px;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+`;
