@@ -10,7 +10,6 @@ export const Flex = styled.div<FlexProps>`
   flex-flow: ${({ layout }) => layout || "row"};
 
   .main {
-    height: 500px;
     width: 100%;
   }
 
@@ -28,7 +27,6 @@ export const Flex = styled.div<FlexProps>`
 
 export const Page = styled(Flex)`
   justify-content: center;
-  align-items: center;
   height: 100%;
-  width: 100%;
+  align-items: center;
 `;

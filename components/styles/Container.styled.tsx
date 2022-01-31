@@ -9,7 +9,7 @@ export const Container = styled.div`
   text-align: center;
   background-color: #222436;
   flex-grow: 1;
-  height: 500px;
+  height: 400px;
 `;
 
 export const StyledTodoistContainer = styled(Container)`
@@ -22,4 +22,11 @@ export const StyledTodoistContainer = styled(Container)`
   color: white;
   font-family: "haxrcorp";
   font-size: 24px;
+`;
+
+export const StyledTodoistErrorContainer = styled(StyledTodoistContainer)`
+  width: 1000px;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
 `;
