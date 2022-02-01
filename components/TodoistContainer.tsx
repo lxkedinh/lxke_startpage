@@ -121,12 +121,12 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
     }
   });
 
-  return filteredTasks.map((task: Task, i: number) => {
+  return filteredTasks.map((taskItem: Task, i: number) => {
     // create time string to display on startpage and convert from 24-hour to 12-hour
     // the error on this line can be ignored because if task.due.datetime, it is defined in
     // initialization of filteredTasks
     // @ts-expect-error
-    let d: Date = new Date(task.due.datetime);
+    let d: Date = new Date(taskItem.due.datetime);
 
     let hours: number = d.getHours();
     let minutes: number = d.getMinutes();
@@ -141,8 +141,9 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
       minutes === 0 ? hours + AMorPM : hours + ":" + minutes + AMorPM;
 
     // find corresponding task label from Label[] from props
-    let label: Label = labels.find(({ id }) => id === task.labelIds[0]);
-    console.log(label);
+    let label: Label = labels.find(({ id }) => id === taskItem.labelIds[0]);
+    console.log("taskItem: ", taskItem);
+    console.log("label: ", label);
 
     // if the task doesn't have a label, set it to Inbox by default
     if (!label) {
@@ -151,10 +152,10 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
           key={i}
           id={i}
           time={timeString}
-          description={task.content}
+          description={taskItem.content}
           label={"Inbox"}
           colorID={48}
-          url={task.url}
+          url={taskItem.url}
         />
       );
     } else {
@@ -163,10 +164,10 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
           key={i}
           id={i}
           time={timeString}
-          description={task.content}
+          description={taskItem.content}
           label={label.name}
           colorID={label.color}
-          url={task.url}
+          url={taskItem.url}
         />
       );
     }
