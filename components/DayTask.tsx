@@ -2,7 +2,6 @@ import * as types from "styled-components/cssprop";
 import { getColor } from "@doist/todoist-api-typescript";
 
 interface Props {
-  id: number;
   time?: string;
   description?: string;
   label?: string;
@@ -10,7 +9,7 @@ interface Props {
   url: string;
 }
 
-const DayTask = ({ id, time, description, label, colorID, url }: Props) => {
+const DayTask = ({ time, description, label, colorID, url }: Props) => {
   return (
     <li
       css={`

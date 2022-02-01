@@ -142,15 +142,12 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
 
     // find corresponding task label from Label[] from props
     let label: Label = labels.find(({ id }) => id === taskItem.labelIds[0]);
-    console.log("taskItem: ", taskItem);
-    console.log("label: ", label);
 
     // if the task doesn't have a label, set it to Inbox by default
     if (!label) {
       return (
         <DayTask
-          key={i}
-          id={i}
+          key={taskItem.id}
           time={timeString}
           description={taskItem.content}
           label={"Inbox"}
@@ -161,8 +158,7 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
     } else {
       return (
         <DayTask
-          key={i}
-          id={i}
+          key={taskItem.id}
           time={timeString}
           description={taskItem.content}
           label={label.name}
