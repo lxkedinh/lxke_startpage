@@ -57,9 +57,23 @@ export default TodoistContainer;
 const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
   // create new array of Todoist tasks that only have due date of parameter weekday
   let filteredTasks: TaskList = taskList.filter((task: Task) => {
+    let today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+    let taskDueDate: Date;
+
     // make sure task objects have due dates and times attached to them
-    if (task && task.due && task.due.datetime)
-      return new Date(task.due.datetime).getDay() === weekday;
+    if (task && task.due && task.due.datetime) {
+      taskDueDate = new Date(task.due.datetime);
+
+      return (
+        taskDueDate.getDay() === weekday &&
+        // this condition prevents the cases where if today is Monday, the tasks due next Monday
+        // are displayed along with the tasks due today
+        taskDueDate.getDate() !=
+          (today.getDate() + 7) % getMonthDays(currentMonth, currentYear)
+      );
+    }
     // if no due time, set it to be 11:59 PM of the due date
     else if (task && task.due && task.due.date && !task.due.datetime) {
       // task.due.date is a string in format YYYY-MM-DD
@@ -79,10 +93,12 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
       // add timestring to task.due.datetime in RFC3339 format (YYYY-MM-DDTHH:MM:SS and
       // then +/-HH:MM timezone offset from UTC)
       task.due.datetime = `${year}-${month}-${day}T${hour}:${minutes}:${seconds}${timezoneOffset}`;
+      taskDueDate = new Date(task.due.datetime);
 
-      console.log(task.due.datetime);
-
-      return new Date(task.due.datetime).getDay() === weekday;
+      return (
+        taskDueDate.getDay() === weekday &&
+        (today.getDate() + 7) % getMonthDays(currentMonth, currentYear)
+      );
     }
 
     // the case where a Todoist task has no due or due.date property can be ignored because I only
@@ -126,6 +142,7 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
 
     // find corresponding task label from Label[] from props
     let label: Label = labels.find(({ id }) => id === task.labelIds[0]);
+    console.log(label);
 
     // if the task doesn't have a label, set it to Inbox by default
     if (!label) {
@@ -181,4 +198,14 @@ const getStdTimezoneOffset = (date: Date): number => {
  */
 const isDstObserved = (date: Date): boolean => {
   return date.getTimezoneOffset() < getStdTimezoneOffset(date);
+};
+
+/**
+ * Returns number of days in specified month.
+ * @param month - integer representing month to look at (0 = January, 1 = February, ...)
+ * @param year - 4 digit integer representing year
+ * @return number of days in month as integer
+ */
+const getMonthDays = (month: number, year: number): number => {
+  return new Date(year, month + 1, 0).getDate();
 };
