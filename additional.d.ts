@@ -3,6 +3,10 @@ declare type TaskList = Task[];
 declare type Labels = Label[];
 
 declare interface TodoistProps {
-  taskList: TaskList | TodoistError;
-  labels: Labels | TodoistError;
+  taskListProps: TaskList | TodoistError;
+  labelsProps: Labels | TodoistError;
+}
+
+declare interface globalProps extends TodoistProps {
+  errorProp: boolean;
 }

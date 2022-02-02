@@ -4,6 +4,9 @@ import { theme } from "../styles/themes";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 
+// React imports
+import { useState, useEffect } from "react";
+
 // bookmark container and banner imports
 import { Container } from "../components/styles/Container.styled";
 import { StyledTitle } from "../components/styles/Title.styled";
@@ -21,7 +24,27 @@ import { TodoistApi, TodoistRequestError } from "@doist/todoist-api-typescript";
 import { Flex, Page } from "../components/styles/Flex.styled";
 import Clock from "../components/Clock";
 
-export default function Home({ taskList, labels }: TodoistProps) {
+export default function Home({
+  taskListProps,
+  labelsProps,
+  errorProp,
+}: globalProps) {
+  const [taskList, setTaskList] = useState<TaskList>(taskListProps);
+  const [labels, setLabels] = useState<Labels>(labelsProps);
+  const [serverError, setServerError] = useState<boolean>(errorProp);
+  const [isEmptyList, setIsEmptyList] = useState<boolean>(false);
+
+  useEffect(() => {
+    // error while data fetching
+    if (errorProp) setServerError(errorProp);
+    // treat case of empty task list as error
+    else if (taskListProps.length === 0) setIsEmptyList(true);
+    else {
+      setTaskList(taskListProps);
+      setLabels(labelsProps);
+    }
+  }, [taskListProps, labelsProps, errorProp]);
+
   return (
     <ThemeProvider theme={theme}>
       <Head>
@@ -90,13 +113,12 @@ export default function Home({ taskList, labels }: TodoistProps) {
             </Container>
             <Banner />
           </Flex>
-          {/* if a message property is present in taskList, it means an error occurred */}
+          {/* properly display corresponding container depending on if error or not */}
           {/* also check for if todo list is empty */}
-          {Object.keys(taskList).includes("message") ||
-          taskList.length === 0 ? (
-            <TodoistErrorContainer emptyList={taskList.length === 0} />
+          {serverError || isEmptyList ? (
+            <TodoistErrorContainer isEmptyList={isEmptyList} />
           ) : (
-            <TodoistContainer taskList={taskList} labels={labels} />
+            <TodoistContainer taskListProps={taskList} labelsProps={labels} />
           )}
         </Flex>
       </Page>
@@ -107,26 +129,37 @@ export default function Home({ taskList, labels }: TodoistProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const api = new TodoistApi(process.env.TODOIST_API_TOKEN as string);
 
+  // boolean flag to indicate if error occured during data fetching
+  let errorProp: boolean = false;
+
   // fetch Todoist tasks for the next 7 days to display on start page
   // if promise fails, TodoistError is returned instead with following properties
   let taskListQuery: TaskList | TodoistError | string | Error = await api
     .getTasks({ filter: "7 days" })
-    .catch((error) => getTodoistError(error));
+    .catch((error) => {
+      errorProp = true;
+      return getTodoistError(error);
+    });
 
   // also fetch Todoist labels for color coding rendered tasks on start page
   // same as above, returns array of Labels or TodoistError
   let labelsQuery: Labels | TodoistError | string | Error = await api
     .getLabels()
-    .catch((error) => getTodoistError(error));
+    .catch((error) => {
+      errorProp = true;
+      return getTodoistError(error);
+    });
 
   // data conversion to allow JSON serialization to be passed as props
-  const taskList: TaskList | TodoistError = JSON.parse(
+  const taskListProps: TaskList | TodoistError = JSON.parse(
     JSON.stringify(taskListQuery)
   );
-  const labels: Labels | TodoistError = JSON.parse(JSON.stringify(labelsQuery));
+  const labelsProps: Labels | TodoistError = JSON.parse(
+    JSON.stringify(labelsQuery)
+  );
 
   return {
-    props: { taskList, labels },
+    props: { taskListProps, labelsProps, errorProp },
   };
 };
 

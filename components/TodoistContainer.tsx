@@ -5,8 +5,10 @@ import { days } from "../util/dateTime";
 import DayTask from "./DayTask";
 import { Task, Label } from "@doist/todoist-api-typescript";
 
-const TodoistContainer = ({ taskList, labels }: TodoistProps) => {
+const TodoistContainer = ({ taskListProps, labelsProps }: TodoistProps) => {
   const d = new Date();
+  let taskList = taskListProps;
+  let labels = labelsProps;
 
   // Modulo the days by 7 to wrap back around at the start of the week
   return (
@@ -121,7 +123,7 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
     }
   });
 
-  return filteredTasks.map((taskItem: Task, i: number) => {
+  return filteredTasks.map((taskItem: Task) => {
     // create time string to display on startpage and convert from 24-hour to 12-hour
     // the error on this line can be ignored because if task.due.datetime, it is defined in
     // initialization of filteredTasks
