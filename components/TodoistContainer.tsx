@@ -99,7 +99,8 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
 
       return (
         taskDueDate.getDay() === weekday &&
-        (today.getDate() + 7) % getMonthDays(currentMonth, currentYear)
+        taskDueDate.getDate() !=
+          (today.getDate() + 7) % getMonthDays(currentMonth, currentYear)
       );
     }
 
