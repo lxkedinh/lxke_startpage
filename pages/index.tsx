@@ -29,25 +29,18 @@ export default function Home({
   labelsProps,
   errorProp,
 }: globalProps) {
-  const [taskList, setTaskList] = useState<TaskList>(taskListProps);
-  const [labels, setLabels] = useState<Labels>(labelsProps);
-  const [serverError, setServerError] = useState<boolean>(errorProp);
+  const [taskList, setTaskList] = useState<TaskList>([]);
+  const [labels, setLabels] = useState<Labels>([]);
+  const [serverError, setServerError] = useState<boolean>(false);
   const [isEmptyList, setIsEmptyList] = useState<boolean>(false);
 
   useEffect(() => {
-    let active = true;
     // error while data fetching
-    if (errorProp) setServerError(errorProp);
+    setServerError(errorProp);
     // treat case of empty task list as error
-    else if (taskListProps.length === 0) setIsEmptyList(true);
-    else {
-      setTaskList(taskListProps);
-      setLabels(labelsProps);
-    }
-
-    return function cleanup() {
-      active = false;
-    };
+    if (taskListProps.length === 0) setIsEmptyList(true);
+    setTaskList(taskListProps);
+    setLabels(labelsProps);
   }, [taskListProps, labelsProps, errorProp]);
 
   return (
