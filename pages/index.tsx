@@ -35,6 +35,7 @@ export default function Home({
   const [isEmptyList, setIsEmptyList] = useState<boolean>(false);
 
   useEffect(() => {
+    let active = true;
     // error while data fetching
     if (errorProp) setServerError(errorProp);
     // treat case of empty task list as error
@@ -43,6 +44,10 @@ export default function Home({
       setTaskList(taskListProps);
       setLabels(labelsProps);
     }
+
+    return function cleanup() {
+      active = false;
+    };
   }, [taskListProps, labelsProps, errorProp]);
 
   return (
