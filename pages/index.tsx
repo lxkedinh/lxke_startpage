@@ -70,10 +70,11 @@ export default function Home({
                   <Bookmark href='https://reddit.com' text='reddit' />
                   <Bookmark href='https://youtube.com' text='youtube' />
                   <Bookmark href='https://twitch.com' text='twitch' />
+                  <Bookmark href='https://animekisa.tv' text='animekisa' />
                   <Bookmark href='https://open.spotify.com' text='spotify' />
                 </BookmarksList>
                 <BookmarksList>
-                  {/* School/Coding stuff */}
+                  {/* School/Productivity */}
                   <Bookmark href='https://github.com' text='github' />
                   <Bookmark href='https://canvas.cpp.edu' text='canvas' />
                   <Bookmark
@@ -81,21 +82,25 @@ export default function Home({
                     text='broncodirect'
                   />
                   <Bookmark href='https://my.cpp.edu' text='mycpp' />
-                  <Bookmark
-                    href='https://outlook.office365.com'
-                    text='outlook'
-                  />
+                  <Bookmark href='https://todoist.com' text='todoist' />
+                  <Bookmark href='https://notion.so' text='notion' />
                   <Bookmark href='https://linkedin.com' text='linkedin' />
                 </BookmarksList>
                 <BookmarksList>
+                  {/* Coding/Miscellaneous */}
                   <Bookmark href='https://leetcode.com' text='leetcode' />
+                  <Bookmark href='https://amazon.com' text='amazon' />
                   <Bookmark
-                    href='https://reddit.com/r/buildapcsales'
-                    text='r/buildapcsales'
+                    href='https://isthereanydeal.com'
+                    text='isthereanydeal'
                   />
                   <Bookmark
                     href='https://reddit.com/r/firefoxcss'
                     text='r/firefoxcss'
+                  />
+                  <Bookmark
+                    href='https://reddit.com/r/buildapcsales'
+                    text='r/buildapcsales'
                   />
                   <Bookmark
                     href='https://reddit.com/r/mechanicalkeyboards'
@@ -105,7 +110,6 @@ export default function Home({
                     href='https://reddit.com/r/mechmarket'
                     text='r/mechmarket'
                   />
-                  <Bookmark href='https://animekisa.tv' text='animekisa' />
                 </BookmarksList>
               </Flex>
             </Container>
