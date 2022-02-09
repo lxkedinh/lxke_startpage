@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { device } from "../../styles/devices";
 
 interface StyledBookmarkProps {
   href: string;
@@ -15,5 +16,9 @@ export const StyledBookmark = styled.a.attrs((props: StyledBookmarkProps) => ({
 
   &:hover {
     text-decoration: underline;
+  }
+
+  @media ${device.laptop} {
+    font-size: 16px;
   }
 `;

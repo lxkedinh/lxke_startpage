@@ -1,5 +1,6 @@
 import { StyledBookmark } from "./styles/Bookmark.styled";
 import * as types from "styled-components/cssprop";
+import { device } from "../styles/devices";
 
 interface BookmarkProps {
   href: string;
@@ -20,6 +21,10 @@ const Bookmark = ({ href, text }: BookmarkProps) => {
 
         &:hover {
           background-color: #1e2030;
+        }
+
+        @media ${device.laptop} {
+          margin-bottom: 0px;
         }
       `}
     >

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { device } from "../../styles/devices";
 
 export const Container = styled.div`
   display: flex;
@@ -10,6 +11,11 @@ export const Container = styled.div`
   background-color: #222436;
   flex-grow: 1;
   height: 400px;
+
+  @media ${device.laptop} {
+    margin-right: 5px;
+    height: 250px;
+  }
 `;
 
 export const StyledTodoistContainer = styled(Container)`
@@ -22,6 +28,10 @@ export const StyledTodoistContainer = styled(Container)`
   color: white;
   font-family: "haxrcorp";
   font-size: 24px;
+
+  @media ${device.laptop} {
+    margin-top: 5px;
+  }
 `;
 
 export const StyledTodoistErrorContainer = styled(StyledTodoistContainer)`

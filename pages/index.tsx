@@ -1,6 +1,6 @@
 // Next.js imports
 import { ThemeProvider } from "styled-components";
-import { theme } from "../styles/themes";
+import { theme } from "../styles/theme";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 

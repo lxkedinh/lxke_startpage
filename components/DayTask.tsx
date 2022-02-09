@@ -1,5 +1,5 @@
-import * as types from "styled-components/cssprop";
 import { getColor } from "@doist/todoist-api-typescript";
+import { StyledDayTask } from "./styles/DayTask.styled";
 
 interface Props {
   time?: string;
@@ -11,18 +11,7 @@ interface Props {
 
 const DayTask = ({ time, description, label, colorID, url }: Props) => {
   return (
-    <li
-      css={`
-        list-style-type: none;
-        font-family: "haxrcorp";
-        color: white;
-        font-size: 24px;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      `}
-    >
+    <StyledDayTask>
       <a href={url}>
         {time} - {description}
         <br />
@@ -35,7 +24,7 @@ const DayTask = ({ time, description, label, colorID, url }: Props) => {
           {label}
         </span>
       </a>
-    </li>
+    </StyledDayTask>
   );
 };
 

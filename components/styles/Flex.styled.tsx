@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { device } from "../../styles/devices";
 
 interface FlexProps {
   layout: string;
@@ -22,6 +23,12 @@ export const Flex = styled.div<FlexProps>`
 
   .bookmarks-container {
     justify-content: center;
+  }
+
+  @media ${device.laptop} {
+    .bookmarks-container {
+      margin: 0 50px;
+    }
   }
 `;
 

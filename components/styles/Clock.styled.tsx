@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { device } from "../../styles/devices";
 
 export const StyledClock = styled.p`
   color: white;
@@ -7,4 +8,8 @@ export const StyledClock = styled.p`
   position: relative;
   left: 4px;
   align-self: flex-start;
+
+  @media ${device.laptop} {
+    font-size: 16px;
+  }
 `;
