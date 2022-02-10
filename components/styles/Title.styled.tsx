@@ -6,14 +6,14 @@ export const StyledTitle = styled.h1`
   overflow: hidden;
   line-height: 18px;
   font-family: haxrcorp, monospace;
-  font-size: 32px;
+  font-size: 22px;
   width: 300px;
   line-height: 1;
-  margin: 0px auto 80px auto;
+  margin: 0px auto 40px auto;
   color: #e6e6e6;
 
-  @media ${device.laptop} {
-    font-size: 22px;
-    margin-bottom: 40px;
+  @media ${device.desktop} {
+    margin-bottom: 80px;
+    font-size: 32px;
   }
 `;

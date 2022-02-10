@@ -23,11 +23,12 @@ export const Flex = styled.div<FlexProps>`
 
   .bookmarks-container {
     justify-content: center;
+    margin: 0 50px;
   }
 
-  @media ${device.laptop} {
+  @media ${device.desktop} {
     .bookmarks-container {
-      margin: 0 50px;
+      margin: 0;
     }
   }
 `;

@@ -6,22 +6,22 @@ export const Container = styled.div`
   flex-flow: column;
   justify-content: center;
   margin: 0;
-  margin-right: 10px;
+  margin-right: 5px;
   text-align: center;
   background-color: #222436;
   flex-grow: 1;
-  height: 400px;
+  height: 250px;
 
-  @media ${device.laptop} {
-    margin-right: 5px;
-    height: 250px;
+  @media ${device.desktop} {
+    margin-right: 10px;
+    height: 400px;
   }
 `;
 
 export const StyledTodoistContainer = styled(Container)`
   width: 100%;
   margin: 0;
-  margin-top: 10px;
+  margin-top: 5px;
   display: flex;
   flex-flow: row;
   justify-content: flex-start;
@@ -29,8 +29,8 @@ export const StyledTodoistContainer = styled(Container)`
   font-family: "haxrcorp";
   font-size: 24px;
 
-  @media ${device.laptop} {
-    margin-top: 5px;
+  @media ${device.desktop} {
+    margin-top: 10px;
   }
 `;
 
