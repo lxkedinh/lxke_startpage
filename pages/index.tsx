@@ -116,12 +116,12 @@ export default function Home({
             <Banner />
           </Flex>
           {/* properly display corresponding container depending on if error or not */}
-          {/* also check for if todo list is empty
+          also check for if todo list is empty
           {serverError || isEmptyList ? (
             <TodoistErrorContainer isEmptyList={isEmptyList} />
           ) : (
             <TodoistContainer taskListProps={taskList} labelsProps={labels} />
-          )} */}
+          )}
         </Flex>
       </Page>
     </ThemeProvider>
@@ -129,15 +129,15 @@ export default function Home({
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const api = new TodoistApi(process.env.TODOIST_API_TOKEN as string);
+  const api = new TodoistApi(process.env.TODOIST_API_TOKEN as string, "https://api.todoist.com/rest/v2/tasks");
 
   // boolean flag to indicate if error occured during data fetching
   let errorProp: boolean = false;
 
   // fetch Todoist tasks for the next 7 days to display on start page
   // if promise fails, TodoistError is returned instead with following properties
-  let taskListQuery: TaskList | TodoistError | string | Error = await api
-    .getTasks()
+  let taskListQuery = await api
+    .getTasks({ filter: "7 days"})
     .catch((error) => {
       errorProp = true;
       return getTodoistError(error);
@@ -156,6 +156,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const taskListProps: TaskList | TodoistError = JSON.parse(
     JSON.stringify(taskListQuery)
   );
+
   const labelsProps: Labels | TodoistError = JSON.parse(
     JSON.stringify(labelsQuery)
   );

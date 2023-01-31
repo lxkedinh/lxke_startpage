@@ -1,15 +1,16 @@
-import { getColor } from "@doist/todoist-api-typescript";
+import { getColorByKey } from "@doist/todoist-api-typescript";
 import { StyledDayTask } from "./styles/DayTask.styled";
 
 interface Props {
   time?: string;
   description?: string;
   label?: string;
-  colorID: number;
+  color: string;
   url: string;
 }
 
-const DayTask = ({ time, description, label, colorID, url }: Props) => {
+const DayTask = ({ time, description, label, color, url }: Props) => {
+  console.log(getColorByKey('yellow'));
   return (
     <StyledDayTask>
       <a href={url}>
@@ -18,7 +19,7 @@ const DayTask = ({ time, description, label, colorID, url }: Props) => {
         <span
           css={`
             /* get color from imported Todoist colors */
-            color: ${getColor(colorID).value};
+            color: ${getColorByKey(color).hexValue};
           `}
         >
           {label}

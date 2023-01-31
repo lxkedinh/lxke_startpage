@@ -144,7 +144,7 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
       minutes === 0 ? hours + AMorPM : hours + ":" + minutes + AMorPM;
 
     // find corresponding task label from Label[] from props
-    let label: Label = labels.find(({ id }) => id === taskItem.labelIds[0]);
+    let label: Label = labels.find(({ name }) => name === taskItem.labels[0]);
 
     // if the task doesn't have a label, set it to Inbox by default
     if (!label) {
@@ -154,7 +154,7 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
           time={timeString}
           description={taskItem.content}
           label={"Inbox"}
-          colorID={48}
+          color={"grey"}
           url={taskItem.url}
         />
       );
@@ -165,7 +165,7 @@ const filterTasks = (taskList: TaskList, labels: Labels, weekday: number) => {
           time={timeString}
           description={taskItem.content}
           label={label.name}
-          colorID={label.color}
+          color={label.color}
           url={taskItem.url}
         />
       );
