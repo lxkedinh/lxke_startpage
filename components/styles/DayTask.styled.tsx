@@ -11,6 +11,10 @@ export const StyledDayTask = styled.li`
     text-decoration: underline;
   }
 
+  @media ${device.laptop} {
+    font-size: 18px;
+  }
+
   @media ${device.desktop} {
     font-size: 24px;
   }

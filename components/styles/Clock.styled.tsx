@@ -9,6 +9,10 @@ export const StyledClock = styled.p`
   left: 4px;
   align-self: flex-start;
 
+  @media ${device.laptop} {
+    font-size: 18px;
+  }
+
   @media ${device.desktop} {
     font-size: 24px;
   }

@@ -18,6 +18,10 @@ export const StyledBookmark = styled.a.attrs((props: StyledBookmarkProps) => ({
     text-decoration: underline;
   }
 
+  @media ${device.laptop} {
+    font-size: 18px;
+  }
+
   @media ${device.desktop} {
     font-size: 24px;
   }
