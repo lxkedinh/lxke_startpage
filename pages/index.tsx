@@ -14,15 +14,31 @@ import { BookmarksList } from "../components/styles/BookmarksList.styled";
 import Bookmark from "../components/Bookmark";
 import Banner from "../components/Banner";
 
-// Todoist related imports
+// Notion related imports
 import TodoistContainer from "../components/TodoistContainer";
 import { TodoistError } from "../util/TodoistError";
 import TodoistErrorContainer from "../components/TodoistErrorContainer";
-import { TodoistApi, TodoistRequestError } from "@doist/todoist-api-typescript";
+import {
+  APIResponseError,
+  Client,
+  collectPaginatedAPI,
+  isFullPage,
+} from "@notionhq/client";
 
 // misc imports
 import { Flex, Page } from "../components/styles/Flex.styled";
 import Clock from "../components/Clock";
+import {
+  PageObjectResponse,
+  TitlePropertyItemObjectResponse,
+} from "@notionhq/client/build/src/api-endpoints";
+import {
+  NotionTask,
+  DateProperty,
+  ClassProperty,
+  TaskTypeProperty,
+  TitleProperty,
+} from "../types/notion-api";
 
 export default function Home({
   taskListProps,
@@ -128,57 +144,71 @@ export default function Home({
   );
 }
 
+// type NotionTaskProperties = {
+//   type: "date";
+//   date: DateResponse | null;
+//   id: string;
+// } | ;
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const api = new TodoistApi(process.env.TODOIST_API_TOKEN as string, "https://api.todoist.com/rest/v2/tasks");
+  const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
-  // boolean flag to indicate if error occured during data fetching
-  let errorProp: boolean = false;
-
-  // fetch Todoist tasks for the next 7 days to display on start page
-  // if promise fails, TodoistError is returned instead with following properties
-  let taskListQuery = await api
-    .getTasks({ filter: "7 days"})
-    .catch((error) => {
-      errorProp = true;
-      return getTodoistError(error);
+  try {
+    const pagesResponse = await collectPaginatedAPI(notion.databases.query, {
+      database_id: process.env.NOTION_DB_ID as string,
+      filter: {
+        and: [
+          {
+            property: "Date",
+            date: {
+              next_week: {},
+            },
+          },
+          {
+            property: "Status",
+            status: {
+              equals: "Incomplete",
+            },
+          },
+        ],
+      },
     });
 
-  // also fetch Todoist labels for color coding rendered tasks on start page
-  // same as above, returns array of Labels or TodoistError
-  let labelsQuery: Labels | TodoistError | string | Error = await api
-    .getLabels()
-    .catch((error) => {
-      errorProp = true;
-      return getTodoistError(error);
-    });
+    const notionTasks: NotionTask[] = [];
 
-  // data conversion to allow JSON serialization to be passed as props
-  const taskListProps: TaskList | TodoistError = JSON.parse(
-    JSON.stringify(taskListQuery)
-  );
+    for (const page of pagesResponse) {
+      if (!isFullPage(page)) {
+        continue;
+      }
 
-  const labelsProps: Labels | TodoistError = JSON.parse(
-    JSON.stringify(labelsQuery)
-  );
+      const notionTask: NotionTask = {
+        url: page.url,
+        date: null,
+        class: null,
+        type: null,
+        title: null,
+      };
 
-  return {
-    props: { taskListProps, labelsProps, errorProp },
-  };
-};
+      Object.keys(page.properties).forEach((key) => {
+        const property = page.properties[key];
 
-/**
- * Helper function that returns a custom TodoistError defined in util/TodoistError.ts to be passed as props
- * @param TodoistRequestError or a regular javascript Error object if Todoist servers encounters a problem it can't handle.
- * @return custom TodoistError object to be passed as props
- */
-const getTodoistError = (error: TodoistRequestError | Error): TodoistError => {
-  if (error instanceof TodoistRequestError) {
-    return new TodoistError(
-      error.message,
-      error.httpStatusCode,
-      error.responseData
-    );
+        switch (property.type) {
+          case "date": // task due date property
+            // ok cast, I always have dates for my Notion tasks
+            const dateString = property.date?.start as string;
+
+            notionTask.date = {
+              datetime: new Date(dateString),
+              id: property.id,
+            };
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof APIResponseError) console.log("api blah blah error");
   }
 
-  return new TodoistError(error.message);
+  return {
+    props: {},
+  };
 };

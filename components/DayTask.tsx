@@ -1,4 +1,3 @@
-import { getColorByKey } from "@doist/todoist-api-typescript";
 import { StyledDayTask } from "./styles/DayTask.styled";
 
 interface Props {
@@ -10,7 +9,7 @@ interface Props {
 }
 
 const DayTask = ({ time, description, label, color, url }: Props) => {
-  console.log(getColorByKey('yellow'));
+  console.log(getColorByKey("yellow"));
   return (
     <StyledDayTask>
       <a href={url}>
