@@ -1,46 +1,22 @@
 export type NotionTask = {
-  url: string;
-  date: {
-    datetime: Date | undefined;
+    url: string;
+    date: TaskDateProperty;
+    class: TaskClassProperty;
+    type: TaskTypeProperty;
+    title: TaskTitleProperty;
+};
+
+export type TaskDateProperty = {
+    datetime: Date;
     id: string;
-  } | null;
-  class: {
+} | undefined;
+
+export type TaskClassProperty = {
     id: string;
     name: string;
-  } | null;
-  type: {
-    id: string;
-    name: string;
-  } | null;
-  title: string | null;
-};
+} | undefined;
 
-type DateResponse = {
-  start: string;
-  end: string | null;
-  time_zone: TimeZoneRequest | null;
-};
+export type TaskTypeProperty = TaskClassProperty;
 
-export type DateProperty = {
-  type: "date";
-  date: DateResponse | null;
-  id: string;
-};
+export type TaskTitleProperty = string | undefined;
 
-export type ClassProperty = {
-  type: "select";
-  select: SelectPropertyResponse | null;
-  id: string;
-};
-
-export type TaskTypeProperty = {
-  type: "select";
-  select: SelectPropertyResponse | null;
-  id: string;
-};
-
-export type TitleProperty = {
-  type: "title";
-  title: Array<RichTextItemResponse>;
-  id: string;
-};
