@@ -1,31 +1,31 @@
 import { StyledDayTask } from "./styles/DayTask.styled";
 
 interface Props {
-  time?: string;
-  description?: string;
-  label?: string;
-  color: string;
-  url: string;
+    time: string;
+    title: string;
+    type: string;
+    taskClass?: string;
+    color: string;
+    url: string;
 }
 
-const DayTask = ({ time, description, label, color, url }: Props) => {
-  console.log(getColorByKey("yellow"));
-  return (
-    <StyledDayTask>
-      <a href={url}>
-        {time} - {description}
-        <br />
-        <span
-          css={`
+const DayTask = ({ time, title, type, taskClass, color, url }: Props) => {
+    return (
+        <StyledDayTask>
+            <a href={url}>
+                {time} - {title}
+                <br />
+                <span
+                    css={`
             /* get color from imported Todoist colors */
             color: ${getColorByKey(color).hexValue};
           `}
-        >
-          {label}
-        </span>
-      </a>
-    </StyledDayTask>
-  );
+                >
+                    {type}
+                </span>
+            </a>
+        </StyledDayTask>
+    );
 };
 
 export default DayTask;

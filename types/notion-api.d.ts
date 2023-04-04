@@ -1,24 +1,18 @@
 export type NotionTask = {
-  url: string;
-  date: TaskDateProperty;
-  class: TaskClassProperty;
-  type: TaskTypeProperty;
-  title: TaskTitleProperty;
+    id: string;
+    url: string;
+    dateISO: string;
+    taskClass: TaskClassProperty;
+    taskType: TaskTypeProperty;
+    title: TaskTitleProperty;
 };
 
-export type TaskDateProperty =
-  | {
-      datetime: string;
-      id: string;
-    }
-  | undefined;
-
 export type TaskClassProperty =
-  | {
-      id: string;
-      name: string;
+    | {
+        id: string;
+        name: string;
     }
-  | undefined;
+    | undefined;
 
 export type TaskTypeProperty = TaskClassProperty;
 
