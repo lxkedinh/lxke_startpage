@@ -1,19 +1,11 @@
 export type NotionTask = {
-    id: string;
-    url: string;
-    dateISO: string;
-    taskClass: TaskClassProperty;
-    taskType: TaskTypeProperty;
-    title: TaskTitleProperty;
+  id: string;
+  url: string;
+  dateISO: string;
+  taskClass: TaskClassProperty;
+  taskType: TaskTypeProperty;
+  title: TaskTitleProperty;
 };
 
-export type TaskClassProperty =
-    | {
-        id: string;
-        name: string;
-    }
-    | undefined;
-
-export type TaskTypeProperty = TaskClassProperty;
-
-export type TaskTitleProperty = string | undefined;
+// TODO: create type for Notion page.properties object to make sure fetched
+// pages are from my calendar
