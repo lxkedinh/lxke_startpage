@@ -4,9 +4,6 @@ import { theme } from "../styles/theme";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 
-// React imports
-import { useState, useEffect } from "react";
-
 // bookmark container and banner imports
 import { Container } from "../components/styles/Container.styled";
 import { StyledTitle } from "../components/styles/Title.styled";
@@ -21,7 +18,6 @@ import {
   APIErrorCode,
   Client,
   ClientErrorCode,
-  collectPaginatedAPI,
   isFullPage,
   isNotionClientError,
   iteratePaginatedAPI,
@@ -33,26 +29,21 @@ import Clock from "../components/Clock";
 import { NotionTask } from "../types/notion-api";
 import { isCalendarPage } from "../util/notion-api";
 
-interface HomeProps {
-  tasks: NotionTask[] | null;
-  errorMessage: string | null;
+interface HomeSuccessProps {
+  success: true;
+  tasks: NotionTask[];
+  errorMessage: null;
 }
 
-export default function Home({ tasks, errorMessage }: HomeProps) {
-  //   const [taskList, setTaskList] = useState<TaskList>([]);
-  //   const [labels, setLabels] = useState<Labels>([]);
-  //   const [serverError, setServerError] = useState<boolean>(false);
-  //   const [isEmptyList, setIsEmptyList] = useState<boolean>(false);
+interface HomeFailureProps {
+  success: false;
+  tasks: null;
+  errorMessage: string;
+}
 
-  //   useEffect(() => {
-  //     // error while data fetching
-  //     setServerError(errorProp);
-  //     // treat case of empty task list as error
-  //     if (taskListProps.length === 0) setIsEmptyList(true);
-  //     setTaskList(taskListProps);
-  //     setLabels(labelsProps);
-  //   }, [taskListProps, labelsProps, errorProp]);
+type HomeProps = HomeSuccessProps | HomeFailureProps;
 
+export default function Home({ success, tasks, errorMessage }: HomeProps) {
   return (
     <ThemeProvider theme={theme}>
       <Head>
@@ -126,10 +117,10 @@ export default function Home({ tasks, errorMessage }: HomeProps) {
             <Banner />
           </Flex>
           {/* properly display corresponding container depending on if error or not */}
-          {errorMessage ? (
-            <NotionErrorContainer errorMessage={errorMessage} />
+          {success ? (
+            <NotionContainer tasks={tasks} />
           ) : (
-            <NotionContainer tasks={tasks as NotionTask[]} />
+            <NotionErrorContainer errorMessage={errorMessage} />
           )}
         </Flex>
       </Page>
@@ -186,46 +177,26 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       notion.databases.query,
       databaseFilter
     )) {
-      if (!isFullPage(page) || !isCalendarPage(page)) {
+      if (!isFullPage(page)) {
         continue;
       }
-
-      let dateISO: string = "";
-      let taskClass: string = "";
-      let taskType: string = "";
-      let title: string = "";
-
-      if (page.properties["Date"].type == "date") {
-        // ok cast, I always have dates for my Notion tasks
-        dateISO = page.properties["Date"].date?.start as string;
-      }
-      if (page.properties["Class"].type == "select") {
-        // class name property
-        taskClass = page.properties["Class"].select?.name as string;
-      }
-      if (
-        page.properties["Type"].id == "cTSw" &&
-        page.properties["Type"].type == "select"
-      ) {
-        // task type property
-        taskType = page.properties["Type"].select?.name as string;
-      }
-      if (page.properties["Title"].type == "title") {
-        title = page.properties["Title"].title[0].plain_text as string;
+      if (!isCalendarPage(page)) {
+        continue;
       }
 
       notionTasks.push({
         id: page.id,
         url: page.url,
-        dateISO: taskDate,
-        class: taskClass,
-        type: taskType,
-        title: taskTitle,
+        dateISO: page.properties.Date.date.start,
+        taskClass: page.properties.Class.select?.name,
+        taskType: page.properties.Type.select.name,
+        title: page.properties.Title.title[0].plain_text,
       });
     }
 
     return {
       props: {
+        success: true,
         tasks: notionTasks,
         errorMessage: null,
       },
@@ -277,6 +248,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
       props: {
+        success: false,
         tasks: null,
         errorMessage,
       },
