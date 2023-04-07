@@ -3,18 +3,20 @@ import {
   RichTextItemResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
-export type NotionTask = {
+declare type NotionTask = {
   id: string;
   url: string;
   dateISO: string;
+  // university class this task belongs to, can be null for personal/work tasks
   taskClass: string | null;
   taskType: string;
   title: string;
 };
 
-// TODO: create type for Notion page.properties object to make sure fetched
-// pages are from my calendar
-type CalendarPageObjectResponse = Omit<PageObjectResponse, "properties"> &
+declare type CalendarPageObjectResponse = Omit<
+  PageObjectResponse,
+  "properties"
+> &
   NotionCalendarProperties;
 
 type NotionCalendarProperties = {

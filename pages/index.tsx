@@ -1,6 +1,4 @@
 // Next.js imports
-import { ThemeProvider } from "styled-components";
-import { theme } from "../styles/theme";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 
@@ -14,6 +12,8 @@ import Banner from "../components/Banner";
 // Notion related imports
 import NotionContainer from "../components/NotionContainer";
 import NotionErrorContainer from "../components/NotionErrorContainer";
+import { NotionTask } from "../types/notion-api";
+import { isCalendarPage } from "../util/notion-api";
 import {
   APIErrorCode,
   Client,
@@ -26,20 +26,22 @@ import {
 // misc imports
 import { Flex, Page } from "../components/styles/Flex.styled";
 import Clock from "../components/Clock";
-import { NotionTask } from "../types/notion-api";
-import { isCalendarPage } from "../util/notion-api";
+import { isPageError, PageErrorCode } from "../util/PageError";
+import { PageError } from "../util/PageError";
+import { ThemeProvider } from "styled-components";
+import { theme } from "../styles/theme";
 
-interface HomeSuccessProps {
+type HomeSuccessProps = {
   success: true;
   tasks: NotionTask[];
   errorMessage: null;
-}
+};
 
-interface HomeFailureProps {
+type HomeFailureProps = {
   success: false;
   tasks: null;
   errorMessage: string;
-}
+};
 
 type HomeProps = HomeSuccessProps | HomeFailureProps;
 
@@ -128,13 +130,9 @@ export default function Home({ success, tasks, errorMessage }: HomeProps) {
   );
 }
 
-// type NotionTaskProperties = {
-//   type: "date";
-//   date: DateResponse | null;
-//   id: string;
-// } | ;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<HomeProps> = async (
+  context
+) => {
   const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
   const today = new Date();
@@ -188,10 +186,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         id: page.id,
         url: page.url,
         dateISO: page.properties.Date.date.start,
-        taskClass: page.properties.Class.select?.name,
+        taskClass: page.properties.Class.select?.name || null,
         taskType: page.properties.Type.select.name,
         title: page.properties.Title.title[0].plain_text,
       });
+    }
+
+    if (notionTasks.length === 0) {
+      throw new PageError(PageErrorCode.NoTasks);
     }
 
     return {
@@ -205,8 +207,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     console.error(error);
     let errorMessage: string = "Unknown error occurred.";
 
-    if (isNotionClientError(error)) {
+    if (isNotionClientError(error) || isPageError(error)) {
       switch (error.code) {
+        case PageErrorCode.NoTasks:
+          errorMessage = "No tasks to do this week!";
+          break;
         case ClientErrorCode.RequestTimeout:
           errorMessage = "Request timed out. Internet problems?";
           break;
