@@ -1,31 +1,36 @@
+import { FunctionComponent } from "react";
 import { StyledDayTask } from "./styles/DayTask.styled";
 
 interface Props {
-    time: string;
-    title: string;
-    type: string;
-    taskClass?: string;
-    color: string;
-    url: string;
+  time: string;
+  title: string;
+  label: string;
+  color: string;
+  url: string;
 }
 
-const DayTask = ({ time, title, type, taskClass, color, url }: Props) => {
-    return (
-        <StyledDayTask>
-            <a href={url}>
-                {time} - {title}
-                <br />
-                <span
-                    css={`
-            /* get color from imported Todoist colors */
-            color: ${getColorByKey(color).hexValue};
+const DayTask: FunctionComponent<Props> = ({
+  time,
+  title,
+  label,
+  color,
+  url,
+}) => {
+  return (
+    <StyledDayTask>
+      <a href={url}>
+        {time} - {title}
+        <br />
+        <span
+          css={`
+            color: ${color};
           `}
-                >
-                    {type}
-                </span>
-            </a>
-        </StyledDayTask>
-    );
+        >
+          {label}
+        </span>
+      </a>
+    </StyledDayTask>
+  );
 };
 
 export default DayTask;

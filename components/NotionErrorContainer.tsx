@@ -3,12 +3,13 @@ import { StyledNotionErrorContainer } from "./styles/Container.styled";
 import { StyledErrorGIF } from "./styles/Banner.styled";
 import Image from "next/image";
 import mew from "../public/mew transparent.gif";
+import { FunctionComponent } from "react";
 
 interface Props {
   errorMessage: string;
 }
 
-const NotionErrorContainer = ({ errorMessage }: Props) => {
+const NotionErrorContainer: FunctionComponent<Props> = ({ errorMessage }) => {
   return (
     <StyledNotionErrorContainer>
       <p>{errorMessage}</p>

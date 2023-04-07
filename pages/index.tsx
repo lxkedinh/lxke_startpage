@@ -1,17 +1,19 @@
 // Next.js imports
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-
-// bookmark container and banner imports
+// React imports
+import { FunctionComponent } from "react";
+// component imports
 import { Container } from "../components/styles/Container.styled";
 import { StyledTitle } from "../components/styles/Title.styled";
 import { BookmarksList } from "../components/styles/BookmarksList.styled";
 import Bookmark from "../components/Bookmark";
 import Banner from "../components/Banner";
-
-// Notion related imports
 import NotionContainer from "../components/NotionContainer";
 import NotionErrorContainer from "../components/NotionErrorContainer";
+import { Flex, Page } from "../components/styles/Flex.styled";
+import Clock from "../components/Clock";
+// Notion imports
 import { NotionTask } from "../types/notion-api";
 import { isCalendarPage } from "../util/notion-api";
 import {
@@ -22,30 +24,28 @@ import {
   isNotionClientError,
   iteratePaginatedAPI,
 } from "@notionhq/client";
-
 // misc imports
-import { Flex, Page } from "../components/styles/Flex.styled";
-import Clock from "../components/Clock";
-import { isPageError, PageErrorCode } from "../util/PageError";
-import { PageError } from "../util/PageError";
+import { PageError, isPageError, PageErrorCode } from "../util/PageError";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../styles/theme";
 
-type HomeSuccessProps = {
+type SuccessProps = {
   success: true;
   tasks: NotionTask[];
   errorMessage: null;
 };
-
-type HomeFailureProps = {
+type FailureProps = {
   success: false;
   tasks: null;
   errorMessage: string;
 };
+type HomeProps = SuccessProps | FailureProps;
 
-type HomeProps = HomeSuccessProps | HomeFailureProps;
-
-export default function Home({ success, tasks, errorMessage }: HomeProps) {
+const Home: FunctionComponent<HomeProps> = ({
+  success,
+  tasks,
+  errorMessage,
+}: HomeProps) => {
   return (
     <ThemeProvider theme={theme}>
       <Head>
@@ -128,7 +128,8 @@ export default function Home({ success, tasks, errorMessage }: HomeProps) {
       </Page>
     </ThemeProvider>
   );
-}
+};
+export default Home;
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async (
   context
