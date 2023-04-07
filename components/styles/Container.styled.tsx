@@ -18,7 +18,7 @@ export const Container = styled.div`
   }
 `;
 
-export const StyledTodoistContainer = styled(Container)`
+export const StyledNotionContainer = styled(Container)`
   width: 100%;
   margin: 0;
   margin-top: 5px;
@@ -34,7 +34,7 @@ export const StyledTodoistContainer = styled(Container)`
   }
 `;
 
-export const StyledTodoistErrorContainer = styled(StyledTodoistContainer)`
+export const StyledNotionErrorContainer = styled(StyledNotionContainer)`
   width: 1000px;
   flex-flow: column;
   justify-content: center;

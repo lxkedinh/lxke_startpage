@@ -1,48 +1,51 @@
 // Next.js imports
-import { ThemeProvider } from "styled-components";
-import { theme } from "../styles/theme";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-
 // React imports
-import { useState, useEffect } from "react";
-
-// bookmark container and banner imports
+import { FunctionComponent } from "react";
+// component imports
 import { Container } from "../components/styles/Container.styled";
 import { StyledTitle } from "../components/styles/Title.styled";
 import { BookmarksList } from "../components/styles/BookmarksList.styled";
 import Bookmark from "../components/Bookmark";
 import Banner from "../components/Banner";
-
-// Todoist related imports
-import TodoistContainer from "../components/TodoistContainer";
-import { TodoistError } from "../util/TodoistError";
-import TodoistErrorContainer from "../components/TodoistErrorContainer";
-import { TodoistApi, TodoistRequestError } from "@doist/todoist-api-typescript";
-
-// misc imports
+import NotionContainer from "../components/NotionContainer";
+import NotionErrorContainer from "../components/NotionErrorContainer";
 import { Flex, Page } from "../components/styles/Flex.styled";
 import Clock from "../components/Clock";
+// Notion imports
+import { NotionTask } from "../types/notion-api";
+import { isCalendarPage } from "../util/notion-api";
+import {
+  APIErrorCode,
+  Client,
+  ClientErrorCode,
+  isFullPage,
+  isNotionClientError,
+  iteratePaginatedAPI,
+} from "@notionhq/client";
+// misc imports
+import { PageError, isPageError, PageErrorCode } from "../util/PageError";
+import { ThemeProvider } from "styled-components";
+import { theme } from "../styles/theme";
 
-export default function Home({
-  taskListProps,
-  labelsProps,
-  errorProp,
-}: globalProps) {
-  const [taskList, setTaskList] = useState<TaskList>([]);
-  const [labels, setLabels] = useState<Labels>([]);
-  const [serverError, setServerError] = useState<boolean>(false);
-  const [isEmptyList, setIsEmptyList] = useState<boolean>(false);
+type SuccessProps = {
+  success: true;
+  tasks: NotionTask[];
+  errorMessage: null;
+};
+type FailureProps = {
+  success: false;
+  tasks: null;
+  errorMessage: string;
+};
+type HomeProps = SuccessProps | FailureProps;
 
-  useEffect(() => {
-    // error while data fetching
-    setServerError(errorProp);
-    // treat case of empty task list as error
-    if (taskListProps.length === 0) setIsEmptyList(true);
-    setTaskList(taskListProps);
-    setLabels(labelsProps);
-  }, [taskListProps, labelsProps, errorProp]);
-
+const Home: FunctionComponent<HomeProps> = ({
+  success,
+  tasks,
+  errorMessage,
+}: HomeProps) => {
   return (
     <ThemeProvider theme={theme}>
       <Head>
@@ -116,69 +119,145 @@ export default function Home({
             <Banner />
           </Flex>
           {/* properly display corresponding container depending on if error or not */}
-          also check for if todo list is empty
-          {serverError || isEmptyList ? (
-            <TodoistErrorContainer isEmptyList={isEmptyList} />
+          {success ? (
+            <NotionContainer tasks={tasks} />
           ) : (
-            <TodoistContainer taskListProps={taskList} labelsProps={labels} />
+            <NotionErrorContainer errorMessage={errorMessage} />
           )}
         </Flex>
       </Page>
     </ThemeProvider>
   );
-}
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const api = new TodoistApi(process.env.TODOIST_API_TOKEN as string, "https://api.todoist.com/rest/v2/tasks");
-
-  // boolean flag to indicate if error occured during data fetching
-  let errorProp: boolean = false;
-
-  // fetch Todoist tasks for the next 7 days to display on start page
-  // if promise fails, TodoistError is returned instead with following properties
-  let taskListQuery = await api
-    .getTasks({ filter: "7 days"})
-    .catch((error) => {
-      errorProp = true;
-      return getTodoistError(error);
-    });
-
-  // also fetch Todoist labels for color coding rendered tasks on start page
-  // same as above, returns array of Labels or TodoistError
-  let labelsQuery: Labels | TodoistError | string | Error = await api
-    .getLabels()
-    .catch((error) => {
-      errorProp = true;
-      return getTodoistError(error);
-    });
-
-  // data conversion to allow JSON serialization to be passed as props
-  const taskListProps: TaskList | TodoistError = JSON.parse(
-    JSON.stringify(taskListQuery)
-  );
-
-  const labelsProps: Labels | TodoistError = JSON.parse(
-    JSON.stringify(labelsQuery)
-  );
-
-  return {
-    props: { taskListProps, labelsProps, errorProp },
-  };
 };
+export default Home;
 
-/**
- * Helper function that returns a custom TodoistError defined in util/TodoistError.ts to be passed as props
- * @param TodoistRequestError or a regular javascript Error object if Todoist servers encounters a problem it can't handle.
- * @return custom TodoistError object to be passed as props
- */
-const getTodoistError = (error: TodoistRequestError | Error): TodoistError => {
-  if (error instanceof TodoistRequestError) {
-    return new TodoistError(
-      error.message,
-      error.httpStatusCode,
-      error.responseData
-    );
+export const getServerSideProps: GetServerSideProps<HomeProps> = async (
+  context
+) => {
+  const notion = new Client({ auth: process.env.NOTION_TOKEN });
+
+  const today = new Date();
+  const sevenDaysFromToday = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() + 7
+  );
+
+  const databaseFilter = {
+    database_id: process.env.NOTION_DB_ID as string,
+    filter: {
+      and: [
+        {
+          property: "Date",
+          date: {
+            after: today.toISOString(),
+          },
+        },
+        {
+          property: "Date",
+          date: {
+            before: sevenDaysFromToday.toISOString(),
+          },
+        },
+        {
+          property: "Status",
+          status: {
+            equals: "Incomplete",
+          },
+        },
+      ],
+    },
+  };
+
+  try {
+    const notionTasks: NotionTask[] = [];
+
+    for await (const page of iteratePaginatedAPI(
+      notion.databases.query,
+      databaseFilter
+    )) {
+      if (!isFullPage(page)) {
+        continue;
+      }
+      if (!isCalendarPage(page)) {
+        continue;
+      }
+
+      notionTasks.push({
+        id: page.id,
+        url: page.url,
+        dateISO: page.properties.Date.date.start,
+        taskClass: page.properties.Class.select?.name || null,
+        taskType: page.properties.Type.select.name,
+        title: page.properties.Title.title[0].plain_text,
+      });
+    }
+
+    if (notionTasks.length === 0) {
+      throw new PageError(PageErrorCode.NoTasks);
+    }
+
+    return {
+      props: {
+        success: true,
+        tasks: notionTasks,
+        errorMessage: null,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+    let errorMessage: string = "Unknown error occurred.";
+
+    if (isNotionClientError(error) || isPageError(error)) {
+      switch (error.code) {
+        case PageErrorCode.NoTasks:
+          errorMessage = "No tasks to do this week!";
+          break;
+        case ClientErrorCode.RequestTimeout:
+          errorMessage = "Request timed out. Internet problems?";
+          break;
+        case APIErrorCode.Unauthorized:
+          errorMessage = "Unauthorized request.";
+          break;
+        case APIErrorCode.RestrictedResource:
+          errorMessage = "Tried to access restricted resource.";
+          break;
+        case APIErrorCode.RateLimited:
+          errorMessage = "Rate limited. Slow down and try again later.";
+          break;
+        case APIErrorCode.ServiceUnavailable:
+          errorMessage = "Notion is unavailable right now.";
+          break;
+        case APIErrorCode.InvalidJSON:
+          errorMessage = "Invalid JSON in request.";
+          break;
+        case APIErrorCode.ConflictError:
+          errorMessage = "Conflict error occurred.";
+          break;
+        case APIErrorCode.InvalidRequest:
+          errorMessage = "Invalid request.";
+          break;
+        case APIErrorCode.ObjectNotFound:
+          errorMessage = "Data could not be found.";
+          break;
+        case APIErrorCode.ValidationError:
+          errorMessage = "Validation error occurred.";
+          break;
+        case APIErrorCode.InvalidRequestURL:
+          errorMessage = "Invalid request URL.";
+          break;
+        case APIErrorCode.InternalServerError:
+          errorMessage = "Unexpected Notion server error occurred.";
+          break;
+      }
+    }
+
+    return {
+      props: {
+        success: false,
+        tasks: null,
+        errorMessage,
+      },
+    };
   }
-
-  return new TodoistError(error.message);
 };
