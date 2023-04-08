@@ -160,9 +160,9 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (
           },
         },
         {
-          property: "Status",
-          status: {
-            equals: "Incomplete",
+          property: "Done",
+          checkbox: {
+            equals: false,
           },
         },
       ],

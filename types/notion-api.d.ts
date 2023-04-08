@@ -41,9 +41,9 @@ type NotionCalendarProperties = {
       select: SelectPropertyResponse | null;
       id: string;
     };
-    Status: {
-      type: "status";
-      status: SelectPropertyResponse;
+    Done: {
+      type: "checkbox";
+      checkbox: boolean;
       id: string;
     };
   };
