@@ -1,6 +1,7 @@
 // Next.js imports
 import Head from "next/head";
 import { GetServerSideProps } from "next";
+import Image from "next/image";
 // React imports
 import { FunctionComponent } from "react";
 // component imports
@@ -28,6 +29,7 @@ import {
 import { PageError, isPageError, PageErrorCode } from "../util/PageError";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../styles/theme";
+import banner from "../public/m1.gif";
 
 type SuccessProps = {
   success: true;
@@ -56,15 +58,20 @@ const Home: FunctionComponent<HomeProps> = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Page layout="column">
-        <Flex className="wrapper" layout="column">
-          <Clock />
-          <Flex className="main" layout="row">
-            <Container>
-              <StyledTitle>ジャスミン</StyledTitle>
-              <Flex className="bookmarks-container" layout="row">
-                <BookmarksList>
-                  {/* Social/Entertainment */}
+      <main>
+        <Clock />
+        {/* <Flex className="main" layout="row"> */}
+        <div className="flex flex-row w-full items-center h-[250px]">
+          {/* <Container> */}
+          <div className="flex flex-col justify-center text-center flex-grow mr-1 items-center bg-ctp-base h-full">
+            <h1 className="font-[Kubasta] text-ctp-text text-2xl mb-5">
+              ジャスミン
+            </h1>
+            {/* <Flex className="bookmarks-container" layout="row"> */}
+            <div className="flex flex-row items-center justify-center">
+              <nav className="w-[120px] list-none mx-5">
+                {/* Social/Entertainment */}
+                <ul>
                   <Bookmark
                     href="https://facebook.com/messages"
                     text="messenger"
@@ -75,9 +82,11 @@ const Home: FunctionComponent<HomeProps> = ({
                   <Bookmark href="https://twitch.com" text="twitch" />
                   <Bookmark href="https://animekisa.tv" text="animekisa" />
                   <Bookmark href="https://open.spotify.com" text="spotify" />
-                </BookmarksList>
-                <BookmarksList>
-                  {/* School/Productivity */}
+                </ul>
+              </nav>
+              <nav className="w-[120px] list-none mx-5">
+                {/* School/Productivity */}
+                <ul>
                   <Bookmark href="https://github.com" text="github" />
                   <Bookmark href="https://canvas.cpp.edu" text="canvas" />
                   <Bookmark
@@ -88,9 +97,11 @@ const Home: FunctionComponent<HomeProps> = ({
                   <Bookmark href="https://todoist.com" text="todoist" />
                   <Bookmark href="https://notion.so" text="notion" />
                   <Bookmark href="https://linkedin.com" text="linkedin" />
-                </BookmarksList>
-                <BookmarksList>
-                  {/* Coding/Miscellaneous */}
+                </ul>
+              </nav>
+              <nav className="w-[120px] list-none mx-5">
+                {/* Coding/Miscellaneous */}
+                <ul>
                   <Bookmark href="https://leetcode.com" text="leetcode" />
                   <Bookmark href="https://amazon.com" text="amazon" />
                   <Bookmark
@@ -113,19 +124,29 @@ const Home: FunctionComponent<HomeProps> = ({
                     href="https://reddit.com/r/mechmarket"
                     text="r/mechmarket"
                   />
-                </BookmarksList>
-              </Flex>
-            </Container>
-            <Banner />
-          </Flex>
-          {/* properly display corresponding container depending on if error or not */}
-          {success ? (
-            <NotionContainer tasks={tasks} />
-          ) : (
-            <NotionErrorContainer errorMessage={errorMessage} />
-          )}
-        </Flex>
-      </Page>
+                </ul>
+              </nav>
+              {/* </Flex> */}
+            </div>
+            {/* </Container> */}
+          </div>
+          <div className=" relative object-cover h-full w-[130px]">
+            <Image
+              src={banner}
+              alt="banner image"
+              layout="fill"
+              className="banner"
+            />
+          </div>
+          {/* </Flex> */}
+        </div>
+        {/* properly display corresponding container depending on if error or not */}
+        {success ? (
+          <NotionContainer tasks={tasks} />
+        ) : (
+          <NotionErrorContainer errorMessage={errorMessage} />
+        )}
+      </main>
     </ThemeProvider>
   );
 };

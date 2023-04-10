@@ -3,34 +3,24 @@
   src: url("haxrcorpttf.ttf");
 }
 
+@font-face {
+  font-family: "Kubasta";
+  src: url("../lib/fonts/Kubasta.ttf");
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  width: 100%;
+  @apply p-0 m-0 h-screen w-screen;
 }
 
 #__next {
-  height: 100%;
-  width: 100%;
+  @apply h-screen w-screen flex flex-col justify-center items-center;
 }
 
 body {
-  font-size: 15px;
-  background-image: url("../public/bg_tile.jpg");
-  background-repeat: repeat;
-  position: absolute;
-  display: block;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  @apply bg-ctp-crust;
 }

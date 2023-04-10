@@ -5,7 +5,6 @@ import { days } from "../util/dateTime";
 import DayTask from "./DayTask";
 import { NotionTask } from "../types/notion-api";
 import { FunctionComponent } from "react";
-import { getColorByKey } from "../util/colors";
 
 interface Props {
   tasks: NotionTask[];
@@ -16,8 +15,8 @@ const NotionContainer: FunctionComponent<Props> = ({ tasks }) => {
 
   // Modulo the days by 7 to wrap back around at the start of the week
   return (
-    <StyledNotionContainer>
-      <DayTaskList>
+    <div className="w-full mt-1 flex flex-row justify-start h-[250px] bg-ctp-base">
+      <div className="flex flex-1 w-[120px] px-2 text-center">
         <DayTitle>{days[today]}</DayTitle>
         <ul>
           {tasks
@@ -25,8 +24,8 @@ const NotionContainer: FunctionComponent<Props> = ({ tasks }) => {
             .sort(sortTasks)
             .map(mapToComponents)}
         </ul>
-      </DayTaskList>
-      <DayTaskList>
+      </div>
+      <div className="flex flex-col flex-1 w-[120px] px-2 text-center">
         <DayTitle>{days[(today + 1) % 7]}</DayTitle>
         <ul>
           {tasks
@@ -34,7 +33,7 @@ const NotionContainer: FunctionComponent<Props> = ({ tasks }) => {
             .sort(sortTasks)
             .map(mapToComponents)}
         </ul>
-      </DayTaskList>
+      </div>
       <DayTaskList>
         <DayTitle>{days[(today + 2) % 7]}</DayTitle>
         <ul>
@@ -80,7 +79,7 @@ const NotionContainer: FunctionComponent<Props> = ({ tasks }) => {
             .map(mapToComponents)}
         </ul>
       </DayTaskList>
-    </StyledNotionContainer>
+    </div>
   );
 };
 
@@ -112,7 +111,6 @@ const mapToComponents = (value: NotionTask): JSX.Element => {
       time={timeString}
       title={value.title}
       label={value.taskClass || value.taskType}
-      color={getColorByKey(value.taskClass || value.taskType)}
       url={value.url}
     ></DayTask>
   );
