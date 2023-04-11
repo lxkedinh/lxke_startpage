@@ -9,15 +9,13 @@ interface Props {
 
 const DayTask: FunctionComponent<Props> = ({ time, title, label, url }) => {
   return (
-    // <StyledDayTask>
-    <li className="font-[Kubasta] hover:bg-ctp-mantle">
+    <li className="font-[Kubasta] text-lg p-1 text-ctp-text hover:bg-ctp-mantle [line-height:1rem] mb-2">
       <a href={url}>
         {time} - {title}
         <br />
-        <span className={colors[label]}>{label}</span>
+        <span className={`${colors[label]} font-bold`}>{label}</span>
       </a>
     </li>
-    // </StyledDayTask>
   );
 };
 

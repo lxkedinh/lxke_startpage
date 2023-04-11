@@ -16,69 +16,85 @@ const NotionContainer: FunctionComponent<Props> = ({ tasks }) => {
   // Modulo the days by 7 to wrap back around at the start of the week
   return (
     <div className="w-full mt-1 flex flex-row justify-start h-[250px] bg-ctp-base">
-      <div className="flex flex-1 w-[120px] px-2 text-center">
-        <DayTitle>{days[today]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === today % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </div>
-      <div className="flex flex-col flex-1 w-[120px] px-2 text-center">
-        <DayTitle>{days[(today + 1) % 7]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === (today + 1) % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </div>
-      <DayTaskList>
-        <DayTitle>{days[(today + 2) % 7]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === (today + 2) % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </DayTaskList>
-      <DayTaskList>
-        <DayTitle>{days[(today + 3) % 7]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === (today + 3) % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </DayTaskList>
-      <DayTaskList>
-        <DayTitle>{days[(today + 4) % 7]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === (today + 4) % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </DayTaskList>
-      <DayTaskList>
-        <DayTitle>{days[(today + 5) % 7]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === (today + 5) % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </DayTaskList>
-      <DayTaskList>
-        <DayTitle>{days[(today + 6) % 7]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === (today + 6) % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </DayTaskList>
+      {days.map((day, index) => (
+        <div className="flex flex-col flex-1 w-[120px] px-2 text-center">
+          <h1 className="font-[Kubasta] text-ctp-text text-lg">
+            {days[(today + index) % 7]}
+          </h1>
+          <ul>
+            {tasks
+              .filter(
+                (t) => new Date(t.dateISO).getDay() === (today + index) % 7
+              )
+              .sort(sortTasks)
+              .map(mapToComponents)}
+          </ul>
+        </div>
+      ))}
+
+      {/* <div className="flex flex-col flex-1 w-[120px] px-2 text-center"> */}
+      {/*   <DayTitle>{days[today]}</DayTitle> */}
+      {/*   <ul> */}
+      {/*     {tasks */}
+      {/*       .filter((t) => new Date(t.dateISO).getDay() === today % 7) */}
+      {/*       .sort(sortTasks) */}
+      {/*       .map(mapToComponents)} */}
+      {/*   </ul> */}
+      {/* </div> */}
+      {/* <div className="flex flex-col flex-1 w-[120px] px-2 text-center"> */}
+      {/*   <DayTitle>{days[(today + 1) % 7]}</DayTitle> */}
+      {/*   <ul> */}
+      {/*     {tasks */}
+      {/*       .filter((t) => new Date(t.dateISO).getDay() === (today + 1) % 7) */}
+      {/*       .sort(sortTasks) */}
+      {/*       .map(mapToComponents)} */}
+      {/*   </ul> */}
+      {/* </div> */}
+      {/* <DayTaskList> */}
+      {/*   <DayTitle>{days[(today + 2) % 7]}</DayTitle> */}
+      {/*   <ul> */}
+      {/*     {tasks */}
+      {/*       .filter((t) => new Date(t.dateISO).getDay() === (today + 2) % 7) */}
+      {/*       .sort(sortTasks) */}
+      {/*       .map(mapToComponents)} */}
+      {/*   </ul> */}
+      {/* </DayTaskList> */}
+      {/* <DayTaskList> */}
+      {/*   <DayTitle>{days[(today + 3) % 7]}</DayTitle> */}
+      {/*   <ul> */}
+      {/*     {tasks */}
+      {/*       .filter((t) => new Date(t.dateISO).getDay() === (today + 3) % 7) */}
+      {/*       .sort(sortTasks) */}
+      {/*       .map(mapToComponents)} */}
+      {/*   </ul> */}
+      {/* </DayTaskList> */}
+      {/* <DayTaskList> */}
+      {/*   <DayTitle>{days[(today + 4) % 7]}</DayTitle> */}
+      {/*   <ul> */}
+      {/*     {tasks */}
+      {/*       .filter((t) => new Date(t.dateISO).getDay() === (today + 4) % 7) */}
+      {/*       .sort(sortTasks) */}
+      {/*       .map(mapToComponents)} */}
+      {/*   </ul> */}
+      {/* </DayTaskList> */}
+      {/* <DayTaskList> */}
+      {/*   <DayTitle>{days[(today + 5) % 7]}</DayTitle> */}
+      {/*   <ul> */}
+      {/*     {tasks */}
+      {/*       .filter((t) => new Date(t.dateISO).getDay() === (today + 5) % 7) */}
+      {/*       .sort(sortTasks) */}
+      {/*       .map(mapToComponents)} */}
+      {/*   </ul> */}
+      {/* </DayTaskList> */}
+      {/* <DayTaskList> */}
+      {/*   <DayTitle>{days[(today + 6) % 7]}</DayTitle> */}
+      {/*   <ul> */}
+      {/*     {tasks */}
+      {/*       .filter((t) => new Date(t.dateISO).getDay() === (today + 6) % 7) */}
+      {/*       .sort(sortTasks) */}
+      {/*       .map(mapToComponents)} */}
+      {/*   </ul> */}
+      {/* </DayTaskList> */}
     </div>
   );
 };

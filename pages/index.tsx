@@ -30,6 +30,7 @@ import { PageError, isPageError, PageErrorCode } from "../util/PageError";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../styles/theme";
 import banner from "../public/m1.gif";
+import allBookmarks from "../util/bookmarks";
 
 type SuccessProps = {
   success: true;
@@ -60,75 +61,23 @@ const Home: FunctionComponent<HomeProps> = ({
 
       <main>
         <Clock />
-        {/* <Flex className="main" layout="row"> */}
         <div className="flex flex-row w-full items-center h-[250px]">
-          {/* <Container> */}
           <div className="flex flex-col justify-center text-center flex-grow mr-1 items-center bg-ctp-base h-full">
             <h1 className="font-[Kubasta] text-ctp-text text-2xl mb-5">
               ジャスミン
             </h1>
-            {/* <Flex className="bookmarks-container" layout="row"> */}
             <div className="flex flex-row items-center justify-center">
-              <nav className="w-[120px] list-none mx-5">
-                {/* Social/Entertainment */}
-                <ul>
-                  <Bookmark
-                    href="https://facebook.com/messages"
-                    text="messenger"
-                  />
-                  <Bookmark href="https://gmail.com" text="gmail" />
-                  <Bookmark href="https://reddit.com" text="reddit" />
-                  <Bookmark href="https://youtube.com" text="youtube" />
-                  <Bookmark href="https://twitch.com" text="twitch" />
-                  <Bookmark href="https://animekisa.tv" text="animekisa" />
-                  <Bookmark href="https://open.spotify.com" text="spotify" />
-                </ul>
-              </nav>
-              <nav className="w-[120px] list-none mx-5">
-                {/* School/Productivity */}
-                <ul>
-                  <Bookmark href="https://github.com" text="github" />
-                  <Bookmark href="https://canvas.cpp.edu" text="canvas" />
-                  <Bookmark
-                    href="https://idp.cpp.edu/idp/profile/cas/login?service=https://cmsweb.cms.cpp.edu/psp/CPOMPRDM/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?1=1"
-                    text="broncodirect"
-                  />
-                  <Bookmark href="https://my.cpp.edu" text="mycpp" />
-                  <Bookmark href="https://todoist.com" text="todoist" />
-                  <Bookmark href="https://notion.so" text="notion" />
-                  <Bookmark href="https://linkedin.com" text="linkedin" />
-                </ul>
-              </nav>
-              <nav className="w-[120px] list-none mx-5">
-                {/* Coding/Miscellaneous */}
-                <ul>
-                  <Bookmark href="https://leetcode.com" text="leetcode" />
-                  <Bookmark href="https://amazon.com" text="amazon" />
-                  <Bookmark
-                    href="https://isthereanydeal.com"
-                    text="isthereanydeal"
-                  />
-                  <Bookmark
-                    href="https://reddit.com/r/firefoxcss"
-                    text="r/firefoxcss"
-                  />
-                  <Bookmark
-                    href="https://reddit.com/r/buildapcsales"
-                    text="r/buildapcsales"
-                  />
-                  <Bookmark
-                    href="https://reddit.com/r/mechanicalkeyboards"
-                    text="r/mechanicalkeyboards"
-                  />
-                  <Bookmark
-                    href="https://reddit.com/r/mechmarket"
-                    text="r/mechmarket"
-                  />
-                </ul>
-              </nav>
-              {/* </Flex> */}
+              {allBookmarks.map((bookmarkSection) => (
+                <nav
+                  key={bookmarkSection[0].text}
+                  className="flex flex-col w-[120px] list-none mx-5"
+                >
+                  {bookmarkSection.map(({ href, text }) => (
+                    <Bookmark key={text} href={href} text={text} />
+                  ))}
+                </nav>
+              ))}
             </div>
-            {/* </Container> */}
           </div>
           <div className=" relative object-cover h-full w-[130px]">
             <Image
@@ -138,7 +87,6 @@ const Home: FunctionComponent<HomeProps> = ({
               className="banner"
             />
           </div>
-          {/* </Flex> */}
         </div>
         {/* properly display corresponding container depending on if error or not */}
         {success ? (
