@@ -1,4 +1,3 @@
-import { StyledBanner } from "./styles/Banner.styled";
 import Image from "next/image";
 import banner from "../public/m1.gif";
 

@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { days } from "../util/dateTime";
 
 const Clock = () => {
-  const [time, setTime] = useState<string>(getTime());
+  let now = new Date();
+  const [time, setTime] = useState<string>(getTime(now));
 
   useEffect(() => {
     let clock = setInterval(() => {
-      setTime(getTime());
+      now.setSeconds(now.getSeconds() + 1);
+      setTime(getTime(now));
     }, 1000);
 
     return () => {
@@ -14,7 +16,7 @@ const Clock = () => {
     };
   }, []);
 
-  return <p className="font-[Kubasta] text-ctp-text">{time}</p>;
+  return <p className="font-[Kubasta] text-ctp-text 2xl:text-2xl">{time}</p>;
 };
 
 export default Clock;
@@ -23,9 +25,7 @@ export default Clock;
  * Get current time through js Date object
  * @returns string that represents the time in "DAY MM/DD/YYYY HOURS:MINUTES:SECONDS"
  */
-const getTime = (): string => {
-  let d: Date = new Date();
-
+const getTime = (d: Date): string => {
   return (
     days[d.getDay()] +
     " " +

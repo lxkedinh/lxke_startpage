@@ -5,14 +5,9 @@ import Image from "next/image";
 // React imports
 import { FunctionComponent } from "react";
 // component imports
-import { Container } from "../components/styles/Container.styled";
-import { StyledTitle } from "../components/styles/Title.styled";
-import { BookmarksList } from "../components/styles/BookmarksList.styled";
 import Bookmark from "../components/Bookmark";
-import Banner from "../components/Banner";
 import NotionContainer from "../components/NotionContainer";
 import NotionErrorContainer from "../components/NotionErrorContainer";
-import { Flex, Page } from "../components/styles/Flex.styled";
 import Clock from "../components/Clock";
 // Notion imports
 import { NotionTask } from "../types/notion-api";
@@ -29,8 +24,8 @@ import {
 import { PageError, isPageError, PageErrorCode } from "../util/PageError";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../styles/theme";
-import banner from "../public/m1.gif";
 import allBookmarks from "../util/bookmarks";
+import { banners } from "../util/images";
 
 type SuccessProps = {
   success: true;
@@ -59,9 +54,9 @@ const Home: FunctionComponent<HomeProps> = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <main className="w-[700px] 2xl:w-[850px]">
         <Clock />
-        <div className="flex flex-row w-full items-center h-[250px]">
+        <div className="flex flex-row w-full items-center h-[250px] 2xl:h-[350px]">
           <div className="flex flex-col justify-center text-center flex-grow mr-1 items-center bg-ctp-base h-full">
             <h1 className="font-[Kubasta] text-ctp-text text-2xl mb-5">
               ジャスミン
@@ -79,9 +74,9 @@ const Home: FunctionComponent<HomeProps> = ({
               ))}
             </div>
           </div>
-          <div className=" relative object-cover h-full w-[130px]">
+          <div className=" relative object-cover h-full w-[130px] 2xl:w-[170px]">
             <Image
-              src={banner}
+              src={banners[Math.floor(Math.random() * banners.length)]}
               alt="banner image"
               layout="fill"
               className="banner"

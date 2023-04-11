@@ -1,13 +1,11 @@
-import { StyledBookmark } from "./styles/Bookmark.styled";
-import * as types from "styled-components/cssprop";
-import { device } from "../styles/devices";
+import { FunctionComponent } from "react";
 
 interface BookmarkProps {
   href: string;
   text: string;
 }
 
-const Bookmark = ({ href, text }: BookmarkProps) => {
+const Bookmark: FunctionComponent<BookmarkProps> = ({ href, text }) => {
   return (
     <li className="text-left w-full h-5 flex items-center">
       <a className="font-[Kubasta] text-ctp-text hover:underline" href={href}>
