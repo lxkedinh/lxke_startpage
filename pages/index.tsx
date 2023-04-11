@@ -1,17 +1,13 @@
 // Next.js imports
 import Head from "next/head";
 import { GetServerSideProps } from "next";
+import Image from "next/image";
 // React imports
 import { FunctionComponent } from "react";
 // component imports
-import { Container } from "../components/styles/Container.styled";
-import { StyledTitle } from "../components/styles/Title.styled";
-import { BookmarksList } from "../components/styles/BookmarksList.styled";
 import Bookmark from "../components/Bookmark";
-import Banner from "../components/Banner";
 import NotionContainer from "../components/NotionContainer";
 import NotionErrorContainer from "../components/NotionErrorContainer";
-import { Flex, Page } from "../components/styles/Flex.styled";
 import Clock from "../components/Clock";
 // Notion imports
 import { NotionTask } from "../types/notion-api";
@@ -28,6 +24,8 @@ import {
 import { PageError, isPageError, PageErrorCode } from "../util/PageError";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../styles/theme";
+import allBookmarks from "../util/bookmarks";
+import { banners } from "../util/images";
 
 type SuccessProps = {
   success: true;
@@ -56,76 +54,42 @@ const Home: FunctionComponent<HomeProps> = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Page layout="column">
-        <Flex className="wrapper" layout="column">
-          <Clock />
-          <Flex className="main" layout="row">
-            <Container>
-              <StyledTitle>ジャスミン</StyledTitle>
-              <Flex className="bookmarks-container" layout="row">
-                <BookmarksList>
-                  {/* Social/Entertainment */}
-                  <Bookmark
-                    href="https://facebook.com/messages"
-                    text="messenger"
-                  />
-                  <Bookmark href="https://gmail.com" text="gmail" />
-                  <Bookmark href="https://reddit.com" text="reddit" />
-                  <Bookmark href="https://youtube.com" text="youtube" />
-                  <Bookmark href="https://twitch.com" text="twitch" />
-                  <Bookmark href="https://animekisa.tv" text="animekisa" />
-                  <Bookmark href="https://open.spotify.com" text="spotify" />
-                </BookmarksList>
-                <BookmarksList>
-                  {/* School/Productivity */}
-                  <Bookmark href="https://github.com" text="github" />
-                  <Bookmark href="https://canvas.cpp.edu" text="canvas" />
-                  <Bookmark
-                    href="https://idp.cpp.edu/idp/profile/cas/login?service=https://cmsweb.cms.cpp.edu/psp/CPOMPRDM/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?1=1"
-                    text="broncodirect"
-                  />
-                  <Bookmark href="https://my.cpp.edu" text="mycpp" />
-                  <Bookmark href="https://todoist.com" text="todoist" />
-                  <Bookmark href="https://notion.so" text="notion" />
-                  <Bookmark href="https://linkedin.com" text="linkedin" />
-                </BookmarksList>
-                <BookmarksList>
-                  {/* Coding/Miscellaneous */}
-                  <Bookmark href="https://leetcode.com" text="leetcode" />
-                  <Bookmark href="https://amazon.com" text="amazon" />
-                  <Bookmark
-                    href="https://isthereanydeal.com"
-                    text="isthereanydeal"
-                  />
-                  <Bookmark
-                    href="https://reddit.com/r/firefoxcss"
-                    text="r/firefoxcss"
-                  />
-                  <Bookmark
-                    href="https://reddit.com/r/buildapcsales"
-                    text="r/buildapcsales"
-                  />
-                  <Bookmark
-                    href="https://reddit.com/r/mechanicalkeyboards"
-                    text="r/mechanicalkeyboards"
-                  />
-                  <Bookmark
-                    href="https://reddit.com/r/mechmarket"
-                    text="r/mechmarket"
-                  />
-                </BookmarksList>
-              </Flex>
-            </Container>
-            <Banner />
-          </Flex>
-          {/* properly display corresponding container depending on if error or not */}
-          {success ? (
-            <NotionContainer tasks={tasks} />
-          ) : (
-            <NotionErrorContainer errorMessage={errorMessage} />
-          )}
-        </Flex>
-      </Page>
+      <main className="w-[700px] 2xl:w-[850px]">
+        <Clock />
+        <div className="flex flex-row w-full items-center h-[250px] 2xl:h-[350px]">
+          <div className="flex flex-col justify-center text-center flex-grow mr-1 items-center bg-ctp-base h-full">
+            <h1 className="font-[Kubasta] text-ctp-text text-2xl mb-5">
+              ジャスミン
+            </h1>
+            <div className="flex flex-row items-center justify-center">
+              {allBookmarks.map((bookmarkSection) => (
+                <nav
+                  key={bookmarkSection[0].text}
+                  className="flex flex-col w-[120px] list-none mx-5"
+                >
+                  {bookmarkSection.map(({ href, text }) => (
+                    <Bookmark key={text} href={href} text={text} />
+                  ))}
+                </nav>
+              ))}
+            </div>
+          </div>
+          <div className=" relative object-cover h-full w-[130px] 2xl:w-[170px]">
+            <Image
+              src={banners[Math.floor(Math.random() * banners.length)]}
+              alt="banner image"
+              layout="fill"
+              className="banner"
+            />
+          </div>
+        </div>
+        {/* properly display corresponding container depending on if error or not */}
+        {success ? (
+          <NotionContainer tasks={tasks} />
+        ) : (
+          <NotionErrorContainer errorMessage={errorMessage} />
+        )}
+      </main>
     </ThemeProvider>
   );
 };

@@ -1,4 +1,3 @@
-import { StyledBanner } from "./styles/Banner.styled";
 import Image from "next/image";
 import banner from "../public/m1.gif";
 
@@ -8,9 +7,9 @@ interface BannerProps {
 
 const Banner = () => {
   return (
-    <StyledBanner>
-      <Image src={banner} alt='banner image' layout='fill' className='banner' />
-    </StyledBanner>
+    <div className=" relative object-cover h-full w-[130px]">
+      <Image src={banner} alt="banner image" layout="fill" className="banner" />
+    </div>
   );
 };
 

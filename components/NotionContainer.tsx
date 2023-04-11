@@ -1,11 +1,7 @@
-import { StyledNotionContainer } from "./styles/Container.styled";
-import { DayTitle } from "./styles/DayTitle.styled";
-import { DayTaskList } from "./styles/DayTaskList.styled";
 import { days } from "../util/dateTime";
 import DayTask from "./DayTask";
 import { NotionTask } from "../types/notion-api";
 import { FunctionComponent } from "react";
-import { getColorByKey } from "../util/colors";
 
 interface Props {
   tasks: NotionTask[];
@@ -16,71 +12,26 @@ const NotionContainer: FunctionComponent<Props> = ({ tasks }) => {
 
   // Modulo the days by 7 to wrap back around at the start of the week
   return (
-    <StyledNotionContainer>
-      <DayTaskList>
-        <DayTitle>{days[today]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === today % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </DayTaskList>
-      <DayTaskList>
-        <DayTitle>{days[(today + 1) % 7]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === (today + 1) % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </DayTaskList>
-      <DayTaskList>
-        <DayTitle>{days[(today + 2) % 7]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === (today + 2) % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </DayTaskList>
-      <DayTaskList>
-        <DayTitle>{days[(today + 3) % 7]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === (today + 3) % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </DayTaskList>
-      <DayTaskList>
-        <DayTitle>{days[(today + 4) % 7]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === (today + 4) % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </DayTaskList>
-      <DayTaskList>
-        <DayTitle>{days[(today + 5) % 7]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === (today + 5) % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </DayTaskList>
-      <DayTaskList>
-        <DayTitle>{days[(today + 6) % 7]}</DayTitle>
-        <ul>
-          {tasks
-            .filter((t) => new Date(t.dateISO).getDay() === (today + 6) % 7)
-            .sort(sortTasks)
-            .map(mapToComponents)}
-        </ul>
-      </DayTaskList>
-    </StyledNotionContainer>
+    <div className="w-full mt-1 flex flex-row justify-start h-[250px] 2xl:h-[300px] bg-ctp-base">
+      {days.map((_, index) => (
+        <div
+          key={days[(today + index) % 7]}
+          className="flex flex-col flex-1 w-[120px] px-2 text-center"
+        >
+          <h1 className="font-[Kubasta] text-ctp-text text-lg">
+            {days[(today + index) % 7]}
+          </h1>
+          <ul>
+            {tasks
+              .filter(
+                (t) => new Date(t.dateISO).getDay() === (today + index) % 7
+              )
+              .sort(sortTasks)
+              .map(mapToComponents)}
+          </ul>
+        </div>
+      ))}
+    </div>
   );
 };
 
@@ -112,7 +63,6 @@ const mapToComponents = (value: NotionTask): JSX.Element => {
       time={timeString}
       title={value.title}
       label={value.taskClass || value.taskType}
-      color={getColorByKey(value.taskClass || value.taskType)}
       url={value.url}
     ></DayTask>
   );
