@@ -8,6 +8,9 @@ import e2 from "../public/error images/2.gif";
 import e3 from "../public/error images/3.gif";
 import e4 from "../public/error images/4.gif";
 import e5 from "../public/error images/5.gif";
+import e6 from "../public/error images/6.gif";
+import e7 from "../public/error images/7.gif";
+import e8 from "../public/error images/8.gif";
 
 export const banners = [b1, b2, b3, b4, b5];
-export const errorImages = [e1, e2, e3, e4, e5];
+export const errorImages = [e1, e2, e3, e4, e5, e6, e7, e8];
