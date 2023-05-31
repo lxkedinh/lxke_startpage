@@ -66,12 +66,8 @@ const codingMiscBookmarks: Bookmark[] = [
     text: "leetcode",
   },
   {
-    href: "https://amazon.com",
-    text: "amazon",
-  },
-  {
-    href: "https://reddit.com/r/firefoxcss",
-    text: "r/firefoxcss",
+    href: "https://ffxivteamcraft.com",
+    text: "ffxivteamcraft",
   },
   {
     href: "https://reddit.com/r/buildapcsales",
