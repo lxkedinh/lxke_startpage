@@ -2,13 +2,11 @@ import { useState, useEffect } from "react";
 import { days } from "../util/dateTime";
 
 const Clock = () => {
-  let now = new Date();
-  const [time, setTime] = useState<string>(getTime(now));
+  const [time, setTime] = useState<string>(getTime(new Date()));
 
   useEffect(() => {
     let clock = setInterval(() => {
-      now.setSeconds(now.getSeconds() + 1);
-      setTime(getTime(now));
+      setTime(getTime(new Date()));
     }, 1000);
 
     return () => {
