@@ -1,3 +1,5 @@
+import { Bookmark } from "../types";
+
 const socialBookmarks: Bookmark[] = [
   {
     href: "https://facebook.com/messages",

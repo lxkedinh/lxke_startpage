@@ -11,7 +11,7 @@ import NotionErrorContainer from "../components/NotionErrorContainer";
 import Clock from "../components/Clock";
 // Notion imports
 import { NotionTask } from "../types/notion-api";
-import { isCalendarPage } from "../util/notion-api";
+import { isCalendarPage, notion } from "../util/notion-api";
 import {
   APIErrorCode,
   Client,
@@ -98,8 +98,6 @@ export default Home;
 export const getServerSideProps: GetServerSideProps<HomeProps> = async (
   context
 ) => {
-  const notion = new Client({ auth: process.env.NOTION_TOKEN });
-
   const today = new Date();
   const sevenDaysFromToday = new Date(
     today.getFullYear(),

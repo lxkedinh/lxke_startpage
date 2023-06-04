@@ -1,4 +1,4 @@
-declare type Bookmark = {
+export type Bookmark = {
   href: string;
   text: string;
 };
