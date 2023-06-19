@@ -26,24 +26,9 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "../styles/theme";
 import allBookmarks from "../util/bookmarks";
 import { banners } from "../util/images";
+import { HomeProps } from "../types";
 
-type SuccessProps = {
-  success: true;
-  tasks: NotionTask[];
-  errorMessage: null;
-};
-type FailureProps = {
-  success: false;
-  tasks: null;
-  errorMessage: string;
-};
-type HomeProps = SuccessProps | FailureProps;
-
-const Home: FunctionComponent<HomeProps> = ({
-  success,
-  tasks,
-  errorMessage,
-}: HomeProps) => {
+const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
   return (
     <ThemeProvider theme={theme}>
       <Head>
@@ -74,7 +59,7 @@ const Home: FunctionComponent<HomeProps> = ({
               ))}
             </div>
           </div>
-          <div className=" relative object-cover h-full w-[130px] 2xl:w-[170px]">
+          <div className="relative object-cover h-full w-[130px] 2xl:w-[170px]">
             <Image
               src={banners[Math.floor(Math.random() * banners.length)]}
               alt="banner image"
@@ -84,10 +69,10 @@ const Home: FunctionComponent<HomeProps> = ({
           </div>
         </div>
         {/* properly display corresponding container depending on if error or not */}
-        {success ? (
-          <NotionContainer tasks={tasks} />
+        {props.status === "success" ? (
+          <NotionContainer tasks={props.data.tasks} />
         ) : (
-          <NotionErrorContainer errorMessage={errorMessage} />
+          <NotionErrorContainer errorMessage={props.message} />
         )}
       </main>
     </ThemeProvider>
@@ -95,9 +80,7 @@ const Home: FunctionComponent<HomeProps> = ({
 };
 export default Home;
 
-export const getServerSideProps: GetServerSideProps<HomeProps> = async (
-  context
-) => {
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   const today = new Date();
   const sevenDaysFromToday = new Date(
     today.getFullYear(),
@@ -161,13 +144,15 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (
 
     return {
       props: {
-        success: true,
-        tasks: notionTasks,
-        errorMessage: null,
+        status: "success",
+        data: {
+          tasks: notionTasks,
+        },
       },
     };
   } catch (error) {
     console.error(error);
+    // default error message if not internal Notion error
     let errorMessage: string = "Unknown error occurred.";
 
     if (isNotionClientError(error) || isPageError(error)) {
@@ -216,9 +201,8 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async (
 
     return {
       props: {
-        success: false,
-        tasks: null,
-        errorMessage,
+        status: "error",
+        message: errorMessage,
       },
     };
   }
