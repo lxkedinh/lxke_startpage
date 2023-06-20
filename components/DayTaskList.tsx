@@ -1,49 +1,33 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useState, useContext } from "react";
 import { NotionTask } from "../types/notion-api";
 import DayTask from "./DayTask";
-import { isFullPage } from "@notionhq/client";
+import { days } from "../util/dateTime";
+import { TasksContext } from "../util/contexts";
 
 type DayTaskListProps = {
-  day: string;
-  tasksProps: NotionTask[];
+  dayOffset: number;
 };
 
 const DayTaskList: FunctionComponent<DayTaskListProps> = ({
-  day,
-  tasksProps,
+  dayOffset,
 }: DayTaskListProps) => {
-  const [tasks, setTasks] = useState<NotionTask[]>(tasksProps);
+  const today = new Date().getDay();
+  const allTasks = useContext(TasksContext);
+  const todayTasks = allTasks.filter(
+    (t) => new Date(t.dateISO).getDay() === (today + dayOffset) % 7
+  );
+  const [tasks, setTasks] = useState<NotionTask[]>(todayTasks);
 
   return (
-    <div className="flex flex-col flex-1 w-[120px] px-2 text-center">
-      <h1 className="font-[Kubasta] text-ctp-text text-lg">{day}</h1>
+    <div className="flex flex-col flex-1 px-2 text-center">
+      <h1 className="font-[Kubasta] text-ctp-text text-lg">
+        {days[(today + dayOffset) % 7]}
+      </h1>
       <ul>
         {tasks.sort(sortTasks).map((task) => {
           let d = new Date(task.dateISO);
           let timeString =
             d.getHours() + ":" + d.getMinutes().toString().padStart(2, "0");
-
-          const handleCompleteTask = async (pageId: string) => {
-            const response = await fetch("/api/tasks/complete", {
-              method: "POST",
-              body: JSON.stringify({
-                pageId: pageId,
-              }),
-              headers: new Headers({
-                "Content-Type": "application/json",
-              }),
-            });
-            const jsonResponse = await response.json();
-
-            if (
-              jsonResponse.status === "success" &&
-              isFullPage(jsonResponse.data.page)
-            ) {
-              setTasks(tasks.filter((t) => t.id !== pageId));
-            } else {
-              console.error("Task completion unsuccessful.", response);
-            }
-          };
 
           return (
             <DayTask
@@ -53,7 +37,8 @@ const DayTaskList: FunctionComponent<DayTaskListProps> = ({
               title={task.title}
               label={task.taskClass || task.taskType}
               url={task.url}
-              handleCompleteTask={handleCompleteTask}
+              tasks={tasks}
+              setTasks={setTasks}
             ></DayTask>
           );
         })}

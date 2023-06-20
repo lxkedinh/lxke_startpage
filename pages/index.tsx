@@ -27,6 +27,7 @@ import { theme } from "../styles/theme";
 import allBookmarks from "../util/bookmarks";
 import { banners } from "../util/images";
 import { HomeProps } from "../types";
+import { TasksContext } from "../util/contexts";
 
 const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
   return (
@@ -70,7 +71,9 @@ const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
         </div>
         {/* properly display corresponding container depending on if error or not */}
         {props.status === "success" ? (
-          <NotionContainer tasks={props.data.tasks} />
+          <TasksContext.Provider value={props.data.tasks}>
+            <NotionContainer />
+          </TasksContext.Provider>
         ) : (
           <NotionErrorContainer errorMessage={props.message} />
         )}
