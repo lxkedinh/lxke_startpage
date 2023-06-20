@@ -1,13 +1,22 @@
 import { FunctionComponent } from "react";
 
 interface Props {
+  pageId: string;
   time: string;
   title: string;
   label: string;
   url: string;
+  handleCompleteTask: (pageId: string) => void;
 }
 
-const DayTask: FunctionComponent<Props> = ({ time, title, label, url }) => {
+const DayTask: FunctionComponent<Props> = ({
+  pageId,
+  time,
+  title,
+  label,
+  url,
+  handleCompleteTask,
+}) => {
   // this must be defined inside component because otherwise tailwind won't
   // detect and include these class names in output css bundle
   const colors: Record<string, string> = {
@@ -23,7 +32,10 @@ const DayTask: FunctionComponent<Props> = ({ time, title, label, url }) => {
   };
 
   return (
-    <li className="font-[Kubasta] text-lg 2xl:text-xl/5 px-1 pb-1 text-ctp-text hover:bg-ctp-mantle [line-height:1rem] mb-2">
+    <li
+      className="font-[Kubasta] text-lg 2xl:text-xl/5 px-1 pb-1 text-ctp-text hover:bg-ctp-mantle [line-height:1rem] mb-2 cursor-pointer"
+      onClick={() => handleCompleteTask(pageId)}
+    >
       <a href={url}>
         {time} - {title}
         <br />
