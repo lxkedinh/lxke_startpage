@@ -1,6 +1,8 @@
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { CalendarPageObjectResponse } from "../types/notion-api";
 import { Client } from "@notionhq/client";
+import { NextApiRequest } from "next";
+import { CompleteTaskRequest } from "../types";
 
 export const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
@@ -27,6 +29,16 @@ export function isCalendarPage(
   }
   const done = properties.Done;
   if (!done || done.type !== "checkbox" || done.checkbox === null) {
+    return false;
+  }
+
+  return true;
+}
+
+export function isCompleteTaskRequest(
+  request: NextApiRequest
+): request is CompleteTaskRequest {
+  if (!request.body.pageId || typeof request.body.pageId !== "string") {
     return false;
   }
 

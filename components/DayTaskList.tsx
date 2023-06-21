@@ -4,13 +4,11 @@ import DayTask from "./DayTask";
 import { days } from "../util/dateTime";
 import { TasksContext } from "../util/contexts";
 
-type DayTaskListProps = {
+type Props = {
   dayOffset: number;
 };
 
-const DayTaskList: FunctionComponent<DayTaskListProps> = ({
-  dayOffset,
-}: DayTaskListProps) => {
+const DayTaskList: FunctionComponent<Props> = ({ dayOffset }) => {
   const today = new Date().getDay();
   const allTasks = useContext(TasksContext);
   const todayTasks = allTasks.filter(
@@ -27,7 +25,9 @@ const DayTaskList: FunctionComponent<DayTaskListProps> = ({
         {tasks.sort(sortTasks).map((task) => {
           let d = new Date(task.dateISO);
           let timeString =
-            d.getHours() + ":" + d.getMinutes().toString().padStart(2, "0");
+            d.getHours().toString().padStart(2, "0") +
+            ":" +
+            d.getMinutes().toString().padStart(2, "0");
 
           return (
             <DayTask

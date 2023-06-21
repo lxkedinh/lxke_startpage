@@ -8,6 +8,7 @@ import BookmarkContainer from "../components/BookmarkContainer";
 import NotionContainer from "../components/NotionContainer";
 import NotionErrorContainer from "../components/NotionErrorContainer";
 import Clock from "../components/Clock";
+import Modal from "../components/Modal";
 // Notion imports
 import { NotionTask } from "../types/notion-api";
 import { isCalendarPage, notion } from "../util/notion-api";
@@ -22,11 +23,23 @@ import {
 import { PageError, isPageError, PageErrorCode } from "../util/PageError";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../styles/theme";
-import { HomeProps } from "../types";
 import { TasksContext, ModalContext } from "../util/contexts";
-import Modal from "../components/Modal";
 
-const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
+type SuccessProps = {
+  status: "success";
+  data: {
+    tasks: NotionTask[];
+  };
+};
+
+type FailureProps = {
+  status: "error";
+  message: string;
+};
+
+type Props = SuccessProps | FailureProps;
+
+const Home: FunctionComponent<Props> = (props: Props) => {
   const [isModalOpen, setModalOpenState] = useState<boolean>(false);
 
   return (
@@ -43,7 +56,6 @@ const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
         <main className="w-[700px] 2xl:w-[850px]">
           <Clock />
           <BookmarkContainer />
-          {/* properly display corresponding container depending on if error or not */}
           {props.status === "success" ? (
             <TasksContext.Provider value={props.data.tasks}>
               <NotionContainer />
@@ -59,7 +71,7 @@ const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
 };
 export default Home;
 
-export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const today = new Date();
   const sevenDaysFromToday = new Date(
     today.getFullYear(),

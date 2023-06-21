@@ -1,4 +1,7 @@
-import { Bookmark } from "../types";
+type Bookmark = {
+  href: string;
+  text: string;
+};
 
 const socialBookmarks: Bookmark[] = [
   {

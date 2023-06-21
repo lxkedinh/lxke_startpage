@@ -9,6 +9,7 @@ export function isPageError(err: unknown): err is PageError {
         case PageErrorCode.NoTasks:
           return true;
         default:
+          return false;
       }
     }
   }

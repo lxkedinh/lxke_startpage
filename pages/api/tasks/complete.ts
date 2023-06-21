@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { notion } from "../../../util/notion-api";
+import { isCompleteTaskRequest, notion } from "../../../util/notion-api";
 import { TaskCompleteResponse } from "../../../types";
 
 export default async function handler(
@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse<TaskCompleteResponse>
 ) {
   try {
-    if (!req.body.pageId || typeof req.body.pageId !== "string") {
+    if (!isCompleteTaskRequest) {
       throw new Error("Notion page ID was not given or was not a string.");
     }
 
@@ -26,10 +26,17 @@ export default async function handler(
         page: response,
       },
     });
-  } catch (err) {
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return res.status(403).json({
+        status: "error",
+        message: err.message,
+      });
+    }
+
     return res.status(403).json({
       status: "error",
-      message: "Notion page ID was not given or was not a string.",
+      message: "Unknown error occurred.",
     });
   }
 }
