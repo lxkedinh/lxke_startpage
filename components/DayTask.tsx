@@ -41,15 +41,12 @@ const DayTask: FunctionComponent<Props> = ({
     from: {
       opacity: 1,
     },
-    onRest: () => setTasks(tasks.filter((t) => t.id !== pageId)),
   }));
   const [hovered, setHovered] = useState<boolean>(false);
   const { setModalOpenState } = useModalContext();
 
   const handleCompleteTask = async (pageId: string) => {
-    try {
-      const response = await completeNotionRequest(pageId);
-
+    if (Math.random() > 0.3) {
       api.start({
         from: {
           opacity: 1,
@@ -57,9 +54,9 @@ const DayTask: FunctionComponent<Props> = ({
         to: {
           opacity: 0,
         },
+        onRest: () => setTasks(tasks.filter((t) => t.id !== pageId)),
       });
-    } catch (err) {
-      console.error("Task completion unsuccessful.", err);
+    } else {
       setModalOpenState(true);
     }
   };
@@ -74,14 +71,14 @@ const DayTask: FunctionComponent<Props> = ({
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <a href={url} className="hover:underline">
+        <div>
           <p>
             {time} - {title}
           </p>
           <p className={`${colors[label]} font-bold 2xl:font-normal`}>
             {label}
           </p>
-        </a>
+        </div>
         <div
           className={`${
             hovered ? "scale-100 w-4" : "scale-0 w-0"

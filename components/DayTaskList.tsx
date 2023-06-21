@@ -9,7 +9,7 @@ type Props = {
 };
 
 const DayTaskList: FunctionComponent<Props> = ({ dayOffset }) => {
-  const today = new Date().getDay();
+  const today = new Date("2023-06-18T00:00:00-07:00").getDay();
   const allTasks = useContext(TasksContext);
   const todayTasks = allTasks.filter(
     (t) => new Date(t.dateISO).getDay() === (today + dayOffset) % 7

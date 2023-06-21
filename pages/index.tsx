@@ -72,13 +72,6 @@ const Home: FunctionComponent<Props> = (props: Props) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const today = new Date();
-  const sevenDaysFromToday = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate() + 7
-  );
-
   const databaseFilter = {
     database_id: process.env.NOTION_DB_ID as string,
     filter: {
@@ -86,13 +79,13 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
         {
           property: "Date",
           date: {
-            after: today.toISOString(),
+            after: "2023-06-14",
           },
         },
         {
           property: "Date",
           date: {
-            before: sevenDaysFromToday.toISOString(),
+            before: "2023-06-21",
           },
         },
         {
