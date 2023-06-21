@@ -1,13 +1,15 @@
+import { useMemo } from "react";
 import Image from "next/image";
-import banner from "../public/m1.gif";
-
-interface BannerProps {
-  src: string;
-}
+import { banners } from "../util/images";
 
 const Banner = () => {
+  const banner = useMemo(
+    () => banners[Math.floor(Math.random() * banners.length)],
+    []
+  );
+
   return (
-    <div className=" relative object-cover h-full w-[130px]">
+    <div className="relative object-cover h-full w-[130px] 2xl:w-[170px]">
       <Image src={banner} alt="banner image" layout="fill" className="banner" />
     </div>
   );

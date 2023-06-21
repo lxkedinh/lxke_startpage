@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { notion } from "../../../util/notion-api";
+import { TaskCompleteResponse } from "../../../types";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<TaskCompleteResponse>
 ) {
   try {
     if (!req.body.pageId || typeof req.body.pageId !== "string") {

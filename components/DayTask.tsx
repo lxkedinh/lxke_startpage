@@ -3,6 +3,7 @@ import { FaCheck } from "react-icons/fa";
 import { animated, useSpring } from "@react-spring/web";
 import { NotionTask } from "../types/notion-api";
 import { isFullPage } from "@notionhq/client";
+import { useModalContext } from "../util/contexts";
 
 interface Props {
   pageId: string;
@@ -43,11 +44,12 @@ const DayTask: FunctionComponent<Props> = ({
     onRest: () => setTasks(tasks.filter((t) => t.id !== pageId)),
   }));
   const [hovered, setHovered] = useState<boolean>(false);
+  const { setModalOpenState } = useModalContext();
 
   const handleCompleteTask = async (pageId: string) => {
-    const response = await completeNotionRequest(pageId);
+    try {
+      const response = await completeNotionRequest(pageId);
 
-    if (response.status === "success" && isFullPage(response.data.page)) {
       api.start({
         from: {
           opacity: 1,
@@ -56,8 +58,9 @@ const DayTask: FunctionComponent<Props> = ({
           opacity: 0,
         },
       });
-    } else {
-      console.error("Task completion unsuccessful.", response);
+    } catch (err) {
+      console.error("Task completion unsuccessful.", err);
+      setModalOpenState(true);
     }
   };
 
@@ -102,7 +105,12 @@ async function completeNotionRequest(pageId: string) {
       "Content-Type": "application/json",
     }),
   });
+
   const jsonResponse = await response.json();
+  if (jsonResponse.status === "error" || !isFullPage(jsonResponse.data.page)) {
+    throw new Error("Task completion unsuccessful.");
+  }
+
   return jsonResponse;
 }
 
