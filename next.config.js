@@ -7,6 +7,33 @@ module.exports = {
             source: "/_next/static/css/_app-client_src_app_globals_css.css",
             headers: [{ key: "Vary", value: "*" }],
           },
+          {
+            source: "/tasks/complete",
+            headers: [
+              {
+                key: "Access-Control-Allow-Origin",
+                value: "https://api.notion.com",
+              },
+              {
+                key: "Access-Control-Allow-Methods",
+                value: "POST",
+              },
+            ],
+          },
         ]
-      : undefined,
+      : () => [
+          {
+            source: "/tasks/complete",
+            headers: [
+              {
+                key: "Access-Control-Allow-Origin",
+                value: "https://api.notion.com",
+              },
+              {
+                key: "Access-Control-Allow-Methods",
+                value: "POST",
+              },
+            ],
+          },
+        ],
 };

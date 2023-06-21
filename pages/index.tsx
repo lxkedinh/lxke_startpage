@@ -1,11 +1,10 @@
 // Next.js imports
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-import Image from "next/image";
 // React imports
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 // component imports
-import Bookmark from "../components/Bookmark";
+import BookmarkContainer from "../components/BookmarkContainer";
 import NotionContainer from "../components/NotionContainer";
 import NotionErrorContainer from "../components/NotionErrorContainer";
 import Clock from "../components/Clock";
@@ -14,7 +13,6 @@ import { NotionTask } from "../types/notion-api";
 import { isCalendarPage, notion } from "../util/notion-api";
 import {
   APIErrorCode,
-  Client,
   ClientErrorCode,
   isFullPage,
   isNotionClientError,
@@ -24,11 +22,13 @@ import {
 import { PageError, isPageError, PageErrorCode } from "../util/PageError";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../styles/theme";
-import allBookmarks from "../util/bookmarks";
-import { banners } from "../util/images";
 import { HomeProps } from "../types";
+import { TasksContext, ModalContext } from "../util/contexts";
+import Modal from "../components/Modal";
 
 const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
+  const [isModalOpen, setModalOpenState] = useState<boolean>(false);
+
   return (
     <ThemeProvider theme={theme}>
       <Head>
@@ -39,42 +39,21 @@ const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="w-[700px] 2xl:w-[850px]">
-        <Clock />
-        <div className="flex flex-row w-full items-center h-[250px] 2xl:h-[350px]">
-          <div className="flex flex-col justify-center text-center flex-grow mr-1 items-center bg-ctp-base h-full">
-            <h1 className="font-[Kubasta] text-ctp-text text-2xl mb-5">
-              ジャスミン
-            </h1>
-            <div className="flex flex-row items-center justify-center">
-              {allBookmarks.map((bookmarkSection) => (
-                <nav
-                  key={bookmarkSection[0].text}
-                  className="flex flex-col w-[120px] list-none mx-5"
-                >
-                  {bookmarkSection.map(({ href, text }) => (
-                    <Bookmark key={text} href={href} text={text} />
-                  ))}
-                </nav>
-              ))}
-            </div>
-          </div>
-          <div className="relative object-cover h-full w-[130px] 2xl:w-[170px]">
-            <Image
-              src={banners[Math.floor(Math.random() * banners.length)]}
-              alt="banner image"
-              layout="fill"
-              className="banner"
-            />
-          </div>
-        </div>
-        {/* properly display corresponding container depending on if error or not */}
-        {props.status === "success" ? (
-          <NotionContainer tasks={props.data.tasks} />
-        ) : (
-          <NotionErrorContainer errorMessage={props.message} />
-        )}
-      </main>
+      <ModalContext.Provider value={{ setModalOpenState }}>
+        <main className="w-[700px] 2xl:w-[850px]">
+          <Clock />
+          <BookmarkContainer />
+          {/* properly display corresponding container depending on if error or not */}
+          {props.status === "success" ? (
+            <TasksContext.Provider value={props.data.tasks}>
+              <NotionContainer />
+            </TasksContext.Provider>
+          ) : (
+            <NotionErrorContainer errorMessage={props.message} />
+          )}
+        </main>
+        {isModalOpen && <Modal />}
+      </ModalContext.Provider>
     </ThemeProvider>
   );
 };
