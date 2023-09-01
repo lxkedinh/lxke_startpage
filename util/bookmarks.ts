@@ -25,8 +25,8 @@ const socialBookmarks: Bookmark[] = [
     text: "twitch",
   },
   {
-    href: "https://9anime.to",
-    text: "9anime",
+    href: "https://aniwave.to/home",
+    text: "Aniwave",
   },
   {
     href: "https://open.spotify.com",
@@ -52,6 +52,10 @@ const productivityBookmarks: Bookmark[] = [
     text: "mycpp",
   },
   {
+    href: "https://outlook.office365.com",
+    text: "outlook",
+  },
+  {
     href: "https://todoist.com",
     text: "todoist",
   },
@@ -71,8 +75,16 @@ const codingMiscBookmarks: Bookmark[] = [
     text: "leetcode",
   },
   {
-    href: "https://ffxivteamcraft.com",
-    text: "ffxivteamcraft",
+    href: "https://pathofexile.com/trade",
+    text: "poe trade",
+  },
+  {
+    href: "https://poedb.tw",
+    text: "poe db",
+  },
+  {
+    href: "https://craftofexile.com",
+    text: "craft of exile",
   },
   {
     href: "https://reddit.com/r/buildapcsales",
