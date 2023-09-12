@@ -21,7 +21,7 @@ const DayTaskList: FunctionComponent<Props> = ({ dayOffset }) => {
       <h1 className="font-[Kubasta] text-ctp-text text-lg">
         {days[(today + dayOffset) % 7]}
       </h1>
-      <ul>
+      <ul className="overflow-y-scroll [scrollbar-width:none]">
         {tasks.sort(sortTasks).map((task) => {
           let d = new Date(task.dateISO);
           let timeString =
@@ -31,11 +31,12 @@ const DayTaskList: FunctionComponent<Props> = ({ dayOffset }) => {
 
           return (
             <DayTask
-              key={task.id}
-              pageId={task.id}
+              key={task.pageId}
+              pageId={task.pageId}
               time={timeString}
               title={task.title}
-              label={task.taskClass || task.taskType}
+              typeId={task.typeId}
+              label={task.label}
               url={task.url}
               tasks={tasks}
               setTasks={setTasks}

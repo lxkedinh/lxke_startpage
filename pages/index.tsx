@@ -120,11 +120,14 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
       }
 
       notionTasks.push({
-        id: page.id,
+        pageId: page.id,
         url: page.url,
         dateISO: page.properties.Date.date.start,
-        taskClass: page.properties.Class.select?.name || null,
-        taskType: page.properties.Type.select.name,
+        typeId:
+          page.properties.Class.select?.id ?? page.properties.Type.select.id,
+        label:
+          page.properties.Class.select?.name ??
+          page.properties.Type.select.name,
         title: page.properties.Title.title[0].plain_text,
       });
     }

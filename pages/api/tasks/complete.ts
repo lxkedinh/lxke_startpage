@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse<TaskCompleteResponse>
 ) {
   try {
-    if (!isCompleteTaskRequest) {
+    if (!isCompleteTaskRequest(req)) {
       throw new Error("Notion page ID was not given or was not a string.");
     }
 
