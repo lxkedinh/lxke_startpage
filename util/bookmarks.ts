@@ -26,7 +26,7 @@ const socialBookmarks: Bookmark[] = [
   },
   {
     href: "https://aniwave.to/home",
-    text: "Aniwave",
+    text: "aniwave",
   },
   {
     href: "https://open.spotify.com",
@@ -56,8 +56,8 @@ const productivityBookmarks: Bookmark[] = [
     text: "outlook",
   },
   {
-    href: "https://todoist.com",
-    text: "todoist",
+    href: "https://app.clickup.com",
+    text: "clickup",
   },
   {
     href: "https://notion.so",
