@@ -10,7 +10,7 @@ const Banner = () => {
 
   return (
     <div className="relative object-cover h-full w-[130px] 2xl:w-[170px]">
-      <Image src={banner} alt="banner image" layout="fill" className="banner" />
+      <Image src={banner} alt="banner image" fill className="banner" />
     </div>
   );
 };

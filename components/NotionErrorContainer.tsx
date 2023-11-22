@@ -18,7 +18,7 @@ const NotionErrorContainer: FunctionComponent<Props> = ({ errorMessage }) => {
         {errorMessage}
       </p>
       <div className="object-cover relative w-[100px] h-[100px]">
-        <Image src={errorImage} alt="mew error gif" layout="fill" />
+        <Image src={errorImage} alt="random error gif" />
       </div>
     </div>
   );
