@@ -3,8 +3,12 @@ import { days } from "../util/dateTime";
 
 const Clock = () => {
   const [time, setTime] = useState<string>(getTime(new Date()));
+  // prevents React hydration error with clock text mismatch
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+
     let clock = setInterval(() => {
       setTime(getTime(new Date()));
     }, 1000);
@@ -14,7 +18,11 @@ const Clock = () => {
     };
   }, []);
 
-  return <p className="font-[Kubasta] text-ctp-text 2xl:text-2xl">{time}</p>;
+  return (
+    <p className="font-[Kubasta] text-ctp-text 2xl:text-2xl">
+      {isClient && time}
+    </p>
+  );
 };
 
 export default Clock;

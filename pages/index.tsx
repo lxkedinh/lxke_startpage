@@ -15,7 +15,7 @@ import { isCalendarPage, notion } from "../util/notion-api";
 import {
   APIErrorCode,
   ClientErrorCode,
-  isFullPage,
+  isFullPageOrDatabase,
   isNotionClientError,
   iteratePaginatedAPI,
 } from "@notionhq/client";
@@ -112,7 +112,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
       notion.databases.query,
       databaseFilter
     )) {
-      if (!isFullPage(page)) {
+      if (!isFullPageOrDatabase(page)) {
         continue;
       }
       if (!isCalendarPage(page)) {

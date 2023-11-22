@@ -1,4 +1,4 @@
-import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { DatabaseObjectResponse, PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { CalendarPageObjectResponse } from "../types/notion-api";
 import { Client } from "@notionhq/client";
 import { NextApiRequest } from "next";
@@ -7,7 +7,7 @@ import { CompleteTaskRequest } from "../types";
 export const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
 export function isCalendarPage(
-  page: PageObjectResponse
+  page: PageObjectResponse | DatabaseObjectResponse
 ): page is CalendarPageObjectResponse {
   const properties = page.properties;
 
@@ -16,7 +16,7 @@ export function isCalendarPage(
     return false;
   }
   const title = properties.Title;
-  if (!title || title.type !== "title" || !title.title || !title.title[0]) {
+  if (!title || title.type !== "title" || !title.title || !Array.isArray(title.title) || !title.title[0]) {
     return false;
   }
   const type = properties.Type;
