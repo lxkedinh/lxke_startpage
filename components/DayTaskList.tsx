@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useContext } from "react";
-import { NotionTask } from "../types/notion-api";
+import { CalendarTask } from "../types/notion-api";
 import DayTask from "./DayTask";
 import { days } from "../util/dateTime";
 import { TasksContext } from "../util/contexts";
@@ -14,7 +14,7 @@ const DayTaskList: FunctionComponent<Props> = ({ dayOffset }) => {
   const todayTasks = allTasks.filter(
     (t) => new Date(t.dateISO).getDay() === (today + dayOffset) % 7
   );
-  const [tasks, setTasks] = useState<NotionTask[]>(todayTasks);
+  const [tasks, setTasks] = useState<CalendarTask[]>(todayTasks);
 
   return (
     <div className="flex flex-col flex-1 px-2 text-center">
@@ -38,7 +38,6 @@ const DayTaskList: FunctionComponent<Props> = ({ dayOffset }) => {
               typeId={task.typeId}
               label={task.label}
               url={task.url}
-              tasks={tasks}
               setTasks={setTasks}
             ></DayTask>
           );
@@ -50,7 +49,7 @@ const DayTaskList: FunctionComponent<Props> = ({ dayOffset }) => {
 
 // sort by ascending due date (soonest to latest)
 // using Date object primitive value
-const sortTasks = (a: NotionTask, b: NotionTask): number => {
+const sortTasks = (a: CalendarTask, b: CalendarTask): number => {
   let firstDate = new Date(a.dateISO).valueOf();
   let secondDate = new Date(b.dateISO).valueOf();
 

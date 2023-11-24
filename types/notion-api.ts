@@ -3,7 +3,7 @@ import {
   RichTextItemResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
-export type NotionTask = {
+export type CalendarTask = {
   pageId: string;
   url: string;
   dateISO: string;
@@ -11,6 +11,11 @@ export type NotionTask = {
   label: string;
   title: string;
 };
+
+export type TodoTask = {
+  blockId: string;
+  text: string;
+}
 
 export type CalendarPageObjectResponse = Omit<
   PageObjectResponse,

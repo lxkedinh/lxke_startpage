@@ -1,24 +1,37 @@
 import { UpdatePageResponse } from "@notionhq/client/build/src/api-endpoints";
 import { NextApiRequest } from "next";
 
-export type TaskCompleteSuccessResponse = {
+type CalendarCompleteSuccessResponse = {
   status: "success";
-  data: {
-    page: UpdatePageResponse;
-  };
+  data: null;
 };
 
-export type TaskCompleteFailResponse = {
+type TodoCompleteSuccessResponse = {
+  status: "success";
+  data: null
+}
+
+type ErrorResponse = {
   status: "error";
   message: string;
 };
 
-export type TaskCompleteResponse =
-  | TaskCompleteSuccessResponse
-  | TaskCompleteFailResponse;
+export type CalendarCompleteResponse =
+  | CalendarCompleteSuccessResponse
+  | ErrorResponse;
 
-export interface CompleteTaskRequest extends NextApiRequest {
+export type TodoCompleteResponse = 
+  | TodoCompleteSuccessResponse
+  | ErrorResponse;
+
+export interface CalendarCompleteRequest extends NextApiRequest {
   body: {
     pageId: string;
   };
+}
+
+export interface TodoCompleteRequest extends NextApiRequest {
+  body: {
+    blockId: string;
+  }
 }

@@ -1,10 +1,13 @@
-import { createContext, useContext } from "react";
-import { NotionTask } from "../types/notion-api";
+import { createContext, useContext, Dispatch, SetStateAction } from "react";
+import { CalendarTask } from "../types/notion-api";
 
-export const TasksContext = createContext<NotionTask[]>([]);
+export const TasksContext = createContext<CalendarTask[]>([]);
 
 type ModalContextType = {
-  setModalOpenState: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalOpen: Dispatch<SetStateAction<boolean>>;
+  modalText: string;
+  setModalText: Dispatch<SetStateAction<string>>;
+  
 };
 export const ModalContext = createContext<ModalContextType | undefined>(
   undefined

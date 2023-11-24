@@ -1,8 +1,7 @@
-import { FunctionComponent, useState } from "react";
+import { Dispatch, FunctionComponent, SetStateAction, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { animated, useSpring } from "@react-spring/web";
-import { NotionTask } from "../types/notion-api";
-import { isFullPage } from "@notionhq/client";
+import { CalendarTask } from "../types/notion-api";
 import { useModalContext } from "../util/contexts";
 
 interface Props {
@@ -12,8 +11,7 @@ interface Props {
   typeId: string;
   label: string;
   url: string;
-  tasks: NotionTask[];
-  setTasks: React.Dispatch<React.SetStateAction<NotionTask[]>>;
+  setTasks: Dispatch<SetStateAction<CalendarTask[]>>;
 }
 
 const DayTask: FunctionComponent<Props> = ({
@@ -23,10 +21,9 @@ const DayTask: FunctionComponent<Props> = ({
   typeId,
   label,
   url,
-  tasks,
   setTasks,
 }) => {
-  // this must be defined inside component because otherwise tailwind won't
+  // must be defined inside component because otherwise tailwind won't
   // detect and include these class names in output css bundle
   // map Notion property ids to tailwind color classes to assign different
   // colors to my different types of tasks on my notion calendar
@@ -45,14 +42,15 @@ const DayTask: FunctionComponent<Props> = ({
     from: {
       opacity: 1,
     },
-    onRest: () => setTasks(tasks.filter((t) => t.pageId !== pageId)),
+    onRest: () =>
+      setTasks((current) => current.filter((t) => t.pageId !== pageId)),
   }));
   const [hovered, setHovered] = useState<boolean>(false);
-  const { setModalOpenState } = useModalContext();
+  const { setModalText, setModalOpen } = useModalContext();
 
   const handleCompleteTask = async (pageId: string) => {
     try {
-      await completeNotionRequest(pageId);
+      await completeCalendarRequest(pageId);
 
       api.start({
         from: {
@@ -64,7 +62,8 @@ const DayTask: FunctionComponent<Props> = ({
       });
     } catch (err) {
       console.error("Task completion unsuccessful.", err);
-      setModalOpenState(true);
+      setModalText("Task completion unsuccessful. Try again.");
+      setModalOpen(true);
     }
   };
 
@@ -99,8 +98,8 @@ const DayTask: FunctionComponent<Props> = ({
   );
 };
 
-async function completeNotionRequest(pageId: string) {
-  const response = await fetch("/api/tasks/complete", {
+async function completeCalendarRequest(pageId: string) {
+  const response = await fetch("/api/calendar", {
     method: "POST",
     body: JSON.stringify({
       pageId: pageId,
@@ -110,12 +109,12 @@ async function completeNotionRequest(pageId: string) {
     }),
   });
 
-  const jsonResponse = await response.json();
-  if (jsonResponse.status === "error" || !isFullPage(jsonResponse.data.page)) {
+  const json = await response.json();
+  if (json.status !== "success") {
     throw new Error("Task completion unsuccessful.");
   }
 
-  return jsonResponse;
+  return json;
 }
 
 export default DayTask;

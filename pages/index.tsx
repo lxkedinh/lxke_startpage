@@ -10,11 +10,12 @@ import NotionErrorContainer from "../components/NotionErrorContainer";
 import Clock from "../components/Clock";
 import Modal from "../components/Modal";
 // Notion imports
-import { NotionTask } from "../types/notion-api";
-import { isCalendarPage, notion } from "../util/notion-api";
+import { CalendarTask, TodoTask } from "../types/notion-api";
+import { isCalendarPage, isTodoListBlock, notion } from "../util/notion-api";
 import {
   APIErrorCode,
   ClientErrorCode,
+  isFullBlock,
   isFullPageOrDatabase,
   isNotionClientError,
   iteratePaginatedAPI,
@@ -24,11 +25,13 @@ import { PageError, isPageError, PageErrorCode } from "../util/PageError";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../styles/theme";
 import { TasksContext, ModalContext } from "../util/contexts";
+import TodoList from "../components/TodoList";
 
 type SuccessProps = {
   status: "success";
   data: {
-    tasks: NotionTask[];
+    tasks: CalendarTask[];
+    todo: TodoTask[];
   };
 };
 
@@ -40,7 +43,8 @@ type FailureProps = {
 type Props = SuccessProps | FailureProps;
 
 const Home: FunctionComponent<Props> = (props: Props) => {
-  const [isModalOpen, setModalOpenState] = useState<boolean>(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [modalText, setModalText] = useState("");
 
   return (
     <ThemeProvider theme={theme}>
@@ -52,7 +56,8 @@ const Home: FunctionComponent<Props> = (props: Props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ModalContext.Provider value={{ setModalOpenState }}>
+      <ModalContext.Provider value={{ setModalOpen, modalText, setModalText }}>
+        {props.status === "success" && <TodoList todoList={props.data.todo} />}
         <main className="w-[700px] 2xl:w-[850px]">
           <Clock />
           <BookmarkContainer />
@@ -78,6 +83,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
     today.getMonth(),
     today.getDate() + 7
   );
+  sevenDaysFromToday.setHours(0);
+  sevenDaysFromToday.setMinutes(0);
 
   const databaseFilter = {
     database_id: process.env.NOTION_DB_ID as string,
@@ -106,7 +113,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
   };
 
   try {
-    const notionTasks: NotionTask[] = [];
+    const notionTasks: CalendarTask[] = [];
 
     for await (const page of iteratePaginatedAPI(
       notion.databases.query,
@@ -136,11 +143,33 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
       throw new PageError(PageErrorCode.NoTasks);
     }
 
+    const blocksResponse = await notion.blocks.children.list({
+      block_id: process.env.NOTION_TODO_BLOCK_ID!,
+    });
+
+    const todoList: TodoTask[] = [];
+    for (const block of blocksResponse.results) {
+      if (
+        !isFullBlock(block) ||
+        !isTodoListBlock(block) ||
+        block.to_do.rich_text.length !== 1 ||
+        block.to_do.checked === true
+      ) {
+        continue;
+      }
+
+      todoList.push({
+        blockId: block.id,
+        text: block.to_do.rich_text[0].plain_text,
+      });
+    }
+
     return {
       props: {
         status: "success",
         data: {
           tasks: notionTasks,
+          todo: todoList,
         },
       },
     };
