@@ -20,7 +20,7 @@ const TodoList: FunctionComponent<Props> = ({ todoList }) => {
       {transitions((style, item) => (
         <animated.div
           style={style}
-          className="text-ctp-text hover:cursor-pointer hover:font-bold flex flex-row items-center p-1 pl-2"
+          className="text-ctp-text hover:cursor-pointer hover:font-bold flex flex-row items-center p-1 pl-2 h-8"
         >
           <ToDoEntry
             key={item.blockId}

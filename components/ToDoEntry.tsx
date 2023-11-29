@@ -4,10 +4,12 @@ import React, {
   SetStateAction,
   useState,
 } from "react";
-import { FaCheck } from "react-icons/fa";
 import { TodoTask } from "../types/notion-api";
 import { animated, useSpring } from "@react-spring/web";
 import { useModalContext } from "../util/contexts";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquare, faCheckSquare } from "@fortawesome/free-regular-svg-icons";
 
 type Props = {
   blockId: string;
@@ -16,13 +18,14 @@ type Props = {
 };
 
 const ToDoEntry: FunctionComponent<Props> = ({ blockId, text, setList }) => {
-  const [clicked, setClicked] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [springs, crossOut] = useSpring(() => ({
     from: {
       width: "0%",
     },
     config: {
-      friction: 50,
+      friction: 30,
     },
     onRest: () =>
       setList((current) => current.filter((t) => t.blockId !== blockId)),
@@ -31,9 +34,10 @@ const ToDoEntry: FunctionComponent<Props> = ({ blockId, text, setList }) => {
 
   const handleClick = async () => {
     try {
+      setLoading(true);
       await completeTodoRequest(blockId);
-
-      setClicked(true);
+      setLoading(false);
+      setCompleted(true);
       crossOut.start({
         from: {
           width: "0%",
@@ -44,24 +48,28 @@ const ToDoEntry: FunctionComponent<Props> = ({ blockId, text, setList }) => {
       });
     } catch (err) {
       console.error(err);
+      setLoading(false);
       setModalText("Todo task completion unsuccessful. Try again.");
       setModalOpen(true);
     }
   };
 
+  if (loading) {
+    return (
+      <div className="w-full flex justify-center">
+        <FontAwesomeIcon icon={faSpinner} spinPulse />
+      </div>
+    );
+  }
+
   return (
     <>
-      <div
-        onClick={handleClick}
-        className="w-4 h-4 border-ctp-lavender border-2 mr-2 text-center"
-      >
-        <FaCheck
-          className={`text-ctp-green text-xs ${
-            clicked ? "opacity-100" : "opacity-0"
-          }`}
-        />
-      </div>
-      <div className="relative">
+      {completed ? (
+        <FontAwesomeIcon icon={faCheckSquare} className="text-ctp-green" />
+      ) : (
+        <FontAwesomeIcon icon={faSquare} onClick={handleClick} />
+      )}
+      <div className="ml-3 relative">
         <animated.div
           className="absolute bg-ctp-lavender w-full h-[2px] top-1/2"
           style={springs}
