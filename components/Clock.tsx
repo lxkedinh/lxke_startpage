@@ -35,16 +35,16 @@ const getTime = (d: Date): string => {
   return (
     days[d.getDay()] +
     " " +
-    String(d.getMonth() + 1).padStart(2, "0") +
+    (d.getMonth() + 1).toString().padStart(2, "0") +
     "/" +
-    String(d.getDate()).padStart(2, "0") +
+    d.getDate().toString().padStart(2, "0") +
     "/" +
     d.getFullYear() +
     " " +
-    String(d.getHours()).padStart(2, "0") +
+    d.getHours().toString().padStart(2, "0") +
     ":" +
-    String(d.getMinutes()).padStart(2, "0") +
+    d.getMinutes().toString().padStart(2, "0") +
     ":" +
-    String(d.getSeconds()).padStart(2, "0")
+    d.getSeconds().toString().padStart(2, "0")
   );
 };
