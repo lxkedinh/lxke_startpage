@@ -23,7 +23,20 @@ module.exports = {
         ]
       : () => [
           {
-            source: "/tasks/complete",
+            source: "/calendar",
+            headers: [
+              {
+                key: "Access-Control-Allow-Origin",
+                value: "https://api.notion.com",
+              },
+              {
+                key: "Access-Control-Allow-Methods",
+                value: "POST",
+              },
+            ],
+          },
+          {
+            source: "/todo",
             headers: [
               {
                 key: "Access-Control-Allow-Origin",

@@ -3,7 +3,7 @@ import { useSpring, animated } from "@react-spring/web";
 import { useModalContext } from "../util/contexts";
 
 const Modal = () => {
-  const { setModalOpenState } = useModalContext();
+  const { modalText, setModalOpen } = useModalContext();
   const [springs, api] = useSpring(() => ({
     from: {
       y: 10,
@@ -25,7 +25,7 @@ const Modal = () => {
         y: 10,
         opacity: 0,
       },
-      onRest: () => setModalOpenState(false),
+      onRest: () => setModalOpen(false),
     }));
   };
 
@@ -35,9 +35,7 @@ const Modal = () => {
       className="absolute bottom-6 bg-ctp-surface0 p-1 px-4 flex flex-row items-center"
       style={springs}
     >
-      <p className="font-[Kubasta] text-ctp-red text-lg">
-        Task completion unsuccessful. Try again.
-      </p>
+      <p className="font-[Kubasta] text-ctp-red text-lg">{modalText}</p>
       <FaTimes
         className="text-ctp-lavender ml-4 hover:cursor-pointer"
         onClick={handleCloseModal}
