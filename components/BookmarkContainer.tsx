@@ -11,13 +11,10 @@ const BookmarkContainer = () => {
           ジャスミン
         </h1>
         <div className="flex flex-row items-center justify-center">
-          {allBookmarks.map((bookmarkSection) => (
-            <nav
-              key={bookmarkSection[0].text}
-              className="flex flex-col w-[120px] list-none mx-5"
-            >
-              {bookmarkSection.map(({ href, text }) => (
-                <Bookmark key={text} href={href} text={text} />
+          {allBookmarks.map((bookmarkSection, index) => (
+            <nav key={index} className="flex flex-col w-[120px] list-none mx-5">
+              {bookmarkSection.map(({ href, text }, index) => (
+                <Bookmark key={index} href={href} text={text} />
               ))}
             </nav>
           ))}

@@ -1,6 +1,7 @@
-import { FaTimes } from "react-icons/fa";
 import { useSpring, animated } from "@react-spring/web";
 import { useModalContext } from "../util/contexts";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Modal = () => {
   const { modalText, setModalOpen } = useModalContext();
@@ -36,7 +37,8 @@ const Modal = () => {
       style={springs}
     >
       <p className="font-[Kubasta] text-ctp-red text-lg">{modalText}</p>
-      <FaTimes
+      <FontAwesomeIcon
+        icon={faTimes}
         className="text-ctp-lavender ml-4 hover:cursor-pointer"
         onClick={handleCloseModal}
       />

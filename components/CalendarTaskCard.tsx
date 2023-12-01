@@ -1,5 +1,6 @@
 import { Dispatch, FunctionComponent, SetStateAction, useState } from "react";
-import { FaCheck } from "react-icons/fa";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { animated, useSpring } from "@react-spring/web";
 import { CalendarTask } from "../types/notion-api";
 import { useModalContext } from "../util/contexts";
@@ -14,7 +15,7 @@ interface Props {
   setTasks: Dispatch<SetStateAction<CalendarTask[]>>;
 }
 
-const DayTask: FunctionComponent<Props> = ({
+const CalendarTaskCard: FunctionComponent<Props> = ({
   pageId,
   time,
   title,
@@ -38,21 +39,23 @@ const DayTask: FunctionComponent<Props> = ({
     "[VjC": "text-ctp-sapphire",
     "3ced2350-32fe-4dd3-b0a4-cef6f6135f85": "text-ctp-teal",
   };
-  const [springs, api] = useSpring(() => ({
+  const [springs, fadeOut] = useSpring(() => ({
     from: {
       opacity: 1,
     },
-    onRest: () =>
-      setTasks((current) => current.filter((t) => t.pageId !== pageId)),
+    onRest: () => setTasks((prev) => prev.filter((t) => t.pageId !== pageId)),
   }));
-  const [hovered, setHovered] = useState<boolean>(false);
+  const [hovered, setHovered] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { setModalText, setModalOpen } = useModalContext();
 
   const handleCompleteTask = async (pageId: string) => {
     try {
+      setLoading(true);
       await completeCalendarRequest(pageId);
+      setLoading(false);
 
-      api.start({
+      fadeOut.start({
         from: {
           opacity: 1,
         },
@@ -62,6 +65,7 @@ const DayTask: FunctionComponent<Props> = ({
       });
     } catch (err) {
       console.error("Task completion unsuccessful.", err);
+      setLoading(false);
       setModalText("Task completion unsuccessful. Try again.");
       setModalOpen(true);
     }
@@ -87,11 +91,19 @@ const DayTask: FunctionComponent<Props> = ({
         </a>
         <div
           className={`${
-            hovered ? "scale-100 w-4" : "scale-0 w-0"
-          } text-base text-ctp-green transition-all ml-1 p-0`}
+            hovered || loading ? "scale-100 w-4" : "scale-0 w-0"
+          } text-base transition-all ml-1 p-0`}
           onClick={() => handleCompleteTask(pageId)}
         >
-          <FaCheck />
+          {loading ? (
+            <FontAwesomeIcon
+              icon={faSpinner}
+              spinPulse
+              className="text-ctp-lavender"
+            />
+          ) : (
+            <FontAwesomeIcon icon={faCheck} className="text-ctp-green" />
+          )}
         </div>
       </div>
     </animated.li>
@@ -117,4 +129,4 @@ async function completeCalendarRequest(pageId: string) {
   return json;
 }
 
-export default DayTask;
+export default CalendarTaskCard;

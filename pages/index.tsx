@@ -2,13 +2,12 @@
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 // React imports
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent } from "react";
 // component imports
 import BookmarkContainer from "../components/BookmarkContainer";
 import NotionContainer from "../components/NotionContainer";
 import NotionErrorContainer from "../components/NotionErrorContainer";
 import Clock from "../components/Clock";
-import Modal from "../components/Modal";
 // Notion imports
 import { CalendarTask, TodoTask } from "../types/notion-api";
 import { isCalendarPage, isTodoListBlock, notion } from "../util/notion-api";
@@ -24,8 +23,9 @@ import {
 import { PageError, isPageError, PageErrorCode } from "../util/PageError";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../styles/theme";
-import { TasksContext, ModalContext } from "../util/contexts";
+import { CalendarTasksContext } from "../util/contexts";
 import TodoList from "../components/TodoList";
+import ModalProvider from "../components/ModalProvider";
 
 type SuccessProps = {
   status: "success";
@@ -43,9 +43,6 @@ type FailureProps = {
 type Props = SuccessProps | FailureProps;
 
 const Home: FunctionComponent<Props> = (props: Props) => {
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [modalText, setModalText] = useState("");
-
   return (
     <ThemeProvider theme={theme}>
       <Head>
@@ -56,21 +53,20 @@ const Home: FunctionComponent<Props> = (props: Props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ModalContext.Provider value={{ setModalOpen, modalText, setModalText }}>
+      <ModalProvider>
         {props.status === "success" && <TodoList todoList={props.data.todo} />}
         <main className="w-[700px] 2xl:w-[850px]">
           <Clock />
           <BookmarkContainer />
           {props.status === "success" ? (
-            <TasksContext.Provider value={props.data.tasks}>
+            <CalendarTasksContext.Provider value={props.data.tasks}>
               <NotionContainer />
-            </TasksContext.Provider>
+            </CalendarTasksContext.Provider>
           ) : (
             <NotionErrorContainer errorMessage={props.message} />
           )}
         </main>
-        {isModalOpen && <Modal />}
-      </ModalContext.Provider>
+      </ModalProvider>
     </ThemeProvider>
   );
 };

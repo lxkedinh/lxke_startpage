@@ -27,8 +27,7 @@ const ToDoEntry: FunctionComponent<Props> = ({ blockId, text, setList }) => {
     config: {
       friction: 30,
     },
-    onRest: () =>
-      setList((current) => current.filter((t) => t.blockId !== blockId)),
+    onRest: () => setList((prev) => prev.filter((t) => t.blockId !== blockId)),
   }));
   const { setModalText, setModalOpen } = useModalContext();
 

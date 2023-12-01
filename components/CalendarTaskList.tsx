@@ -1,16 +1,16 @@
 import { FunctionComponent, useState, useContext } from "react";
-import { CalendarTask } from "../types/notion-api";
-import DayTask from "./DayTask";
+import type { CalendarTask } from "../types/notion-api";
+import CalendarTaskCard from "./CalendarTaskCard";
 import { days } from "../util/dateTime";
-import { TasksContext } from "../util/contexts";
+import { useCalendarTasksContext } from "../util/contexts";
 
 type Props = {
   dayOffset: number;
 };
 
-const DayTaskList: FunctionComponent<Props> = ({ dayOffset }) => {
+const CalendarTaskList: FunctionComponent<Props> = ({ dayOffset }) => {
   const today = new Date().getDay();
-  const allTasks = useContext(TasksContext);
+  const allTasks = useCalendarTasksContext();
   const todayTasks = allTasks.filter(
     (t) => new Date(t.dateISO).getDay() === (today + dayOffset) % 7
   );
@@ -30,7 +30,7 @@ const DayTaskList: FunctionComponent<Props> = ({ dayOffset }) => {
             d.getMinutes().toString().padStart(2, "0");
 
           return (
-            <DayTask
+            <CalendarTaskCard
               key={task.pageId}
               pageId={task.pageId}
               time={timeString}
@@ -39,7 +39,7 @@ const DayTaskList: FunctionComponent<Props> = ({ dayOffset }) => {
               label={task.label}
               url={task.url}
               setTasks={setTasks}
-            ></DayTask>
+            />
           );
         })}
       </ul>
@@ -62,4 +62,4 @@ const sortTasks = (a: CalendarTask, b: CalendarTask): number => {
   }
 };
 
-export default DayTaskList;
+export default CalendarTaskList;
