@@ -12,7 +12,10 @@ const BookmarkContainer = () => {
         </h1>
         <div className="flex flex-row items-center justify-center">
           {allBookmarks.map((bookmarkSection, index) => (
-            <nav key={index} className="flex flex-col w-[120px] list-none mx-5">
+            <nav
+              key={index}
+              className="flex flex-col w-[140px] list-none mx-5 items-center justify-center"
+            >
               {bookmarkSection.map(({ href, text }, index) => (
                 <Bookmark key={index} href={href} text={text} />
               ))}
