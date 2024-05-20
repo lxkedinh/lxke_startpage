@@ -5,10 +5,6 @@ type Bookmark = {
 
 const socialBookmarks: Bookmark[] = [
   {
-    href: "https://facebook.com/messages",
-    text: "messenger",
-  },
-  {
     href: "https://gmail.com",
     text: "gmail",
   },
@@ -16,6 +12,7 @@ const socialBookmarks: Bookmark[] = [
     href: "https://reddit.com",
     text: "reddit",
   },
+
   {
     href: "https://youtube.com",
     text: "youtube",
@@ -28,28 +25,24 @@ const socialBookmarks: Bookmark[] = [
     href: "https://aniwave.to/home",
     text: "aniwave",
   },
-  {
-    href: "https://open.spotify.com",
-    text: "spotify",
-  },
 ];
 
 const productivityBookmarks: Bookmark[] = [
   {
-    href: "https://github.com",
-    text: "github",
+    href: "https://linkedin.com",
+    text: "linkedin",
   },
   {
-    href: "https://canvas.cpp.edu",
-    text: "canvas",
+    href: "https://cpp.joinhandshake.com/stu/postings",
+    text: "handshake",
   },
   {
     href: "https://idp.cpp.edu/idp/profile/cas/login?service=https://cmsweb.cms.cpp.edu/psp/CPOMPRDM/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?1=1",
     text: "broncodirect",
   },
   {
-    href: "https://my.cpp.edu",
-    text: "mycpp",
+    href: "https://www.overleaf.com",
+    text: "overleaf",
   },
   {
     href: "https://outlook.office365.com",
@@ -63,28 +56,20 @@ const productivityBookmarks: Bookmark[] = [
     href: "https://notion.so",
     text: "notion",
   },
-  {
-    href: "https://linkedin.com",
-    text: "linkedin",
-  },
 ];
 
 const codingMiscBookmarks: Bookmark[] = [
+  {
+    href: "https://github.com",
+    text: "github",
+  },
   {
     href: "https://leetcode.com",
     text: "leetcode",
   },
   {
-    href: "https://pathofexile.com/trade",
-    text: "poe trade",
-  },
-  {
-    href: "https://poedb.tw",
-    text: "poe db",
-  },
-  {
-    href: "https://craftofexile.com",
-    text: "craft of exile",
+    href: "https://ffxivteamcraft.com",
+    text: "ffxivteamcraft",
   },
   {
     href: "https://reddit.com/r/buildapcsales",
