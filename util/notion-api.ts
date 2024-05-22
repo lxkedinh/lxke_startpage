@@ -1,4 +1,9 @@
-import { BlockObjectResponse, DatabaseObjectResponse, PageObjectResponse, ToDoBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import {
+  BlockObjectResponse,
+  DatabaseObjectResponse,
+  PageObjectResponse,
+  ToDoBlockObjectResponse,
+} from "@notionhq/client/build/src/api-endpoints";
 import { CalendarPageObjectResponse } from "../types/notion-api";
 import { Client } from "@notionhq/client";
 import { NextApiRequest } from "next";
@@ -16,7 +21,13 @@ export function isCalendarPage(
     return false;
   }
   const title = properties.Title;
-  if (!title || title.type !== "title" || !title.title || !Array.isArray(title.title) || !title.title[0]) {
+  if (
+    !title ||
+    title.type !== "title" ||
+    !title.title ||
+    !Array.isArray(title.title) ||
+    !title.title[0]
+  ) {
     return false;
   }
   const type = properties.Type;
@@ -41,7 +52,7 @@ export function isTodoListBlock(
   if (!res.type || res.type !== "to_do") {
     return false;
   }
-  
+
   return true;
 }
 
@@ -55,7 +66,9 @@ export function isCalendarCompleteRequest(
   return true;
 }
 
-export function isTodoCompleteRequest(req: NextApiRequest): req is TodoCompleteRequest {
+export function isTodoCompleteRequest(
+  req: NextApiRequest
+): req is TodoCompleteRequest {
   if (!req.body.blockId || typeof req.body.blockId !== "string") {
     return false;
   }

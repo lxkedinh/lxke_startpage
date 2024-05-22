@@ -1,25 +1,23 @@
-import React, {
-  Dispatch,
-  FunctionComponent,
-  SetStateAction,
-  useState,
-} from "react";
+import React, { FunctionComponent, useState } from "react";
 import { TodoTask } from "../types/notion-api";
 import { animated, useSpring } from "@react-spring/web";
 import { useModalContext } from "../util/contexts";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquare, faCheckSquare } from "@fortawesome/free-regular-svg-icons";
+import { KeyedMutator } from "swr";
 
 type Props = {
   blockId: string;
   text: string;
-  setList: Dispatch<SetStateAction<TodoTask[]>>;
+  mutateTodos: KeyedMutator<TodoTask[]>;
 };
 
-const ToDoEntry: FunctionComponent<Props> = ({ blockId, text, setList }) => {
+const ToDoEntry: FunctionComponent<Props> = ({
+  blockId,
+  text,
+  mutateTodos,
+}) => {
   const [completed, setCompleted] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [springs, crossOut] = useSpring(() => ({
     from: {
       width: "0%",
@@ -27,39 +25,35 @@ const ToDoEntry: FunctionComponent<Props> = ({ blockId, text, setList }) => {
     config: {
       friction: 30,
     },
-    onRest: () => setList((prev) => prev.filter((t) => t.blockId !== blockId)),
+    onRest: () => handleCrossoutRest(),
   }));
   const { setModalText, setModalOpen } = useModalContext();
 
   const handleClick = async () => {
+    setCompleted(true);
+    crossOut.start({
+      from: {
+        width: "0%",
+      },
+      to: {
+        width: "100%",
+      },
+    });
+  };
+
+  const handleCrossoutRest = async () => {
     try {
-      setLoading(true);
       await completeTodoRequest(blockId);
-      setLoading(false);
-      setCompleted(true);
-      crossOut.start({
-        from: {
-          width: "0%",
-        },
-        to: {
-          width: "100%",
-        },
+      mutateTodos((todos) => {
+        return todos?.filter((t) => t.blockId !== blockId);
       });
     } catch (err) {
       console.error(err);
-      setLoading(false);
-      setModalText("Todo task completion unsuccessful. Try again.");
+      setModalText("Todo completion unsuccessful. Try again!");
       setModalOpen(true);
+      setCompleted(false);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="w-full flex justify-center">
-        <FontAwesomeIcon icon={faSpinner} spinPulse />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -80,7 +74,7 @@ const ToDoEntry: FunctionComponent<Props> = ({ blockId, text, setList }) => {
 };
 
 async function completeTodoRequest(blockId: string) {
-  const response = await fetch("/api/todo", {
+  const response = await fetch("/api/todo/complete", {
     method: "POST",
     body: JSON.stringify({
       blockId: blockId,
