@@ -45,8 +45,8 @@ const productivityBookmarks: Bookmark[] = [
     text: "overleaf",
   },
   {
-    href: "https://outlook.office365.com",
-    text: "outlook",
+    href: "https://ucsd.gmail.edu",
+    text: "ucsd email",
   },
   {
     href: "https://app.clickup.com",
