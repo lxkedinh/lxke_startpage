@@ -45,7 +45,7 @@ const productivityBookmarks: Bookmark[] = [
     text: "overleaf",
   },
   {
-    href: "https://ucsd.gmail.edu",
+    href: "https://mail.google.com/a/ucsd.edu",
     text: "ucsd email",
   },
   {
