@@ -21,10 +21,6 @@ const socialBookmarks: Bookmark[] = [
     href: "https://twitch.com",
     text: "twitch",
   },
-  {
-    href: "https://aniwave.to/home",
-    text: "aniwave",
-  },
 ];
 
 const productivityBookmarks: Bookmark[] = [
@@ -33,12 +29,12 @@ const productivityBookmarks: Bookmark[] = [
     text: "linkedin",
   },
   {
-    href: "https://cpp.joinhandshake.com/stu/postings",
+    href: "https://ucsd.joinhandshake.com",
     text: "handshake",
   },
   {
-    href: "https://idp.cpp.edu/idp/profile/cas/login?service=https://cmsweb.cms.cpp.edu/psp/CPOMPRDM/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?1=1",
-    text: "broncodirect",
+    href: "https://act.ucsd.edu/myTritonlink20/display.htm",
+    text: "tritonlink",
   },
   {
     href: "https://www.overleaf.com",
@@ -47,10 +43,6 @@ const productivityBookmarks: Bookmark[] = [
   {
     href: "https://mail.google.com/a/ucsd.edu",
     text: "ucsd email",
-  },
-  {
-    href: "https://app.clickup.com",
-    text: "clickup",
   },
   {
     href: "https://notion.so",
@@ -66,10 +58,6 @@ const codingMiscBookmarks: Bookmark[] = [
   {
     href: "https://leetcode.com",
     text: "leetcode",
-  },
-  {
-    href: "https://ffxivteamcraft.com",
-    text: "ffxivteamcraft",
   },
   {
     href: "https://reddit.com/r/buildapcsales",
