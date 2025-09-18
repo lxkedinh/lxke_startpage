@@ -25,8 +25,8 @@ const socialBookmarks: Bookmark[] = [
 
 const productivityBookmarks: Bookmark[] = [
   {
-    href: "https://linkedin.com",
-    text: "linkedin",
+    href: "https://canvas.ucsd.edu",
+    text: "canvas",
   },
   {
     href: "https://ucsd.joinhandshake.com",
@@ -47,6 +47,10 @@ const productivityBookmarks: Bookmark[] = [
   {
     href: "https://notion.so",
     text: "notion",
+  },
+  {
+    href: "https://linkedin.com",
+    text: "linkedin",
   },
 ];
 
