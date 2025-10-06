@@ -29,6 +29,10 @@ const productivityBookmarks: Bookmark[] = [
     text: "canvas",
   },
   {
+    href: "https://piazza.com",
+    text: "piazza",
+  },
+  {
     href: "https://ucsd.joinhandshake.com",
     text: "handshake",
   },
