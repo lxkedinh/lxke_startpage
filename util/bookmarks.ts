@@ -18,15 +18,27 @@ const socialBookmarks: Bookmark[] = [
     text: "youtube",
   },
   {
-    href: "https://twitch.com",
+    href: "https://twitch.tv",
     text: "twitch",
   },
 ];
 
-const productivityBookmarks: Bookmark[] = [
+const schoolBookmarks: Bookmark[] = [
+  {
+    href: "https://mcoblenz.github.io/CSE210/",
+    text: "cse210",
+  },
+  {
+    href: "https://cseweb.ucsd.edu/~tzli/cse272/wi2026/",
+    text: "cse272",
+  },
   {
     href: "https://canvas.ucsd.edu",
     text: "canvas",
+  },
+  {
+    href: "https://gradescope.com",
+    text: "gradescope",
   },
   {
     href: "https://piazza.com",
@@ -40,6 +52,9 @@ const productivityBookmarks: Bookmark[] = [
     href: "https://act.ucsd.edu/myTritonlink20/display.htm",
     text: "tritonlink",
   },
+];
+
+const productivityBookmarks: Bookmark[] = [
   {
     href: "https://www.overleaf.com",
     text: "overleaf",
@@ -83,6 +98,7 @@ const codingMiscBookmarks: Bookmark[] = [
 
 const allBookmarks: Bookmark[][] = [
   socialBookmarks,
+  schoolBookmarks,
   productivityBookmarks,
   codingMiscBookmarks,
 ];
