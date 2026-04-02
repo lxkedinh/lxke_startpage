@@ -25,12 +25,12 @@ const socialBookmarks: Bookmark[] = [
 
 const schoolBookmarks: Bookmark[] = [
   {
-    href: "https://mcoblenz.github.io/CSE210/",
-    text: "cse210",
+    href: "https://ucsd-cse230-loris.github.io/",
+    text: "cse230",
   },
   {
-    href: "https://cseweb.ucsd.edu/~tzli/cse272/wi2026/",
-    text: "cse272",
+    href: "https://ucsd-cse231.github.io/sp24/index.html",
+    text: "cse231",
   },
   {
     href: "https://canvas.ucsd.edu",
