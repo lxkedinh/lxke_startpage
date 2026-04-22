@@ -29,7 +29,7 @@ const schoolBookmarks: Bookmark[] = [
     text: "cse230",
   },
   {
-    href: "https://ucsd-cse231.github.io/sp24/index.html",
+    href: "https://ucsd-cse231.github.io/sp26/",
     text: "cse231",
   },
   {
