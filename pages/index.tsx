@@ -46,7 +46,7 @@ const Home: FunctionComponent<Props> = (props: Props) => {
   return (
     <ThemeProvider theme={theme}>
       <Head>
-        <title>ジャスミン</title>
+        <title>よく生きる</title>
         <meta name="viewport" content="width=device-width" />
         <meta charSet="utf-8" />
         <meta name="description" content="Luke's personal start page" />
